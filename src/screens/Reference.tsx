@@ -160,15 +160,24 @@ export default function Reference() {
         <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
           Gym equipment
         </h2>
-        <ul className="mt-2 space-y-1.5">
-          {EQUIPMENT_INVENTORY.map((item) => (
-            <li key={item} className="flex gap-2 text-sm text-text">
-              <span className="shrink-0 text-brass">🛠</span>
-              <span>{item}</span>
-            </li>
+        <div className="mt-2 space-y-3">
+          {EQUIPMENT_INVENTORY.map((group) => (
+            <div key={group.category}>
+              <h3 className="text-[11px] font-semibold uppercase tracking-wide text-muted">
+                {group.category}
+              </h3>
+              <ul className="mt-1 space-y-1">
+                {group.items.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm text-text">
+                    <span className="shrink-0 text-brass">🛠</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
-        </ul>
-        <p className="mt-2 text-[11px] text-muted">
+        </div>
+        <p className="mt-3 text-[11px] text-muted">
           The full kit the program draws on. Each exercise lists the exact bar/attachment to grab.
         </p>
       </section>

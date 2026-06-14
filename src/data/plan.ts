@@ -14,6 +14,7 @@ export type Exercise = {
   restSec: number
   why?: string
   superset?: boolean
+  optional?: boolean // optional bodyweight finisher — do it when you've got gas
   equipment?: string // the specific gear/bar/attachment to grab for this lift
   form: FormPoint[] // 3 points each
 }
@@ -22,6 +23,7 @@ export type Day = {
   title: string
   focus: string
   tracked: boolean
+  warmup?: string[] // RAMP warm-up checklist (not logged)
   exercises?: Exercise[]
   checklist?: string[]
 }
@@ -32,11 +34,19 @@ export const DAYS: Day[] = [
     title: 'Day 1 · Upper-Chest Priority',
     focus: 'The #1 session — fix the upper chest',
     tracked: true,
+    warmup: [
+      'Raise: 3–5 min easy bike / row / rope to break a light sweat',
+      'Band pull-aparts ×20',
+      'Band shoulder dislocates / pass-throughs ×10',
+      'Shoulder CARs ×5/side',
+      'Scap push-ups ×10, then 10 push-ups',
+      'Potentiate: 2 ramp-up sets on the first press (light → working weight)',
+    ],
     exercises: [
       {
         id: 'd1-incline-db-press',
         name: 'Incline Dumbbell Press (bench 30–45°)',
-        equipment: 'Adjustable bench (30–45°) · dumbbells',
+        equipment: 'Dumbbells (5–100 lb) · adjustable bench 30–45°',
         targetSets: 4,
         repRange: '6–8',
         restSec: 150,
@@ -52,7 +62,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-low-high-fly',
         name: 'Low-to-High Cable Fly',
-        equipment: 'Cable · 2 D-handles · low pulleys',
+        equipment: 'Sorinex functional trainer · dual low pulleys + ARC handles (alt: Tonal)',
         targetSets: 4,
         repRange: '12–15',
         restSec: 90,
@@ -68,7 +78,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-incline-bb-press',
         name: 'Incline Barbell Press (or Reverse-Grip Bench)',
-        equipment: 'Barbell · rack w/ safeties · bench 30–45°',
+        equipment: 'Texas Power Bar · Sorinex rack safeties · bench 30–45° (alt: Kabuki bar)',
         targetSets: 3,
         repRange: '8–10',
         restSec: 90,
@@ -82,7 +92,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-landmine-press',
         name: 'Standing Landmine Press',
-        equipment: 'Landmine · barbell',
+        equipment: 'Landmine attachment · Darko shorty bar',
         targetSets: 3,
         repRange: '8–10 / side',
         restSec: 90,
@@ -96,7 +106,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-rope-pushdown',
         name: 'Triceps Rope Pushdown',
-        equipment: 'Cable · rope · high pulley',
+        equipment: 'Sorinex functional trainer · Spiral Strength rope (alt: Tonal)',
         targetSets: 3,
         repRange: '10–12',
         restSec: 60,
@@ -110,7 +120,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-pallof-press',
         name: 'Cable Pallof Press',
-        equipment: 'Cable · D-handle · chest height',
+        equipment: 'Sorinex functional trainer · ARC single handle, chest height (alt: PureTorque PRO)',
         targetSets: 3,
         repRange: '10 / side',
         restSec: 45,
@@ -121,6 +131,24 @@ export const DAYS: Day[] = [
           { text: 'Move slowly — resisting the rotation is the actual work.' },
         ],
       },
+      {
+        id: 'd1-feet-elev-pushup',
+        name: 'Feet-Elevated Push-Up (optional finisher)',
+        optional: true,
+        equipment: 'Bodyweight · feet on a bench',
+        targetSets: 2,
+        repRange: 'AMRAP',
+        restSec: 60,
+        why: 'Optional upper-chest burnout — feet up shifts the load onto the clavicular pecs. Take each set near failure; add a backpack/plate or do myo-rep clusters as you get strong.',
+        form: [
+          {
+            text: 'Feet on a bench, body in one straight line — squeeze glutes and brace, no sagging hips.',
+            care: true,
+          },
+          { text: 'Hands just below shoulders; lower under control to the upper-chest line, elbows ~45°.' },
+          { text: 'Press up and slightly together to a full lockout, then straight into the next rep.' },
+        ],
+      },
     ],
   },
   {
@@ -128,11 +156,19 @@ export const DAYS: Day[] = [
     title: 'Day 2 · Lower + Rotation',
     focus: 'Posterior chain, golf power, protect L5/S1',
     tracked: true,
+    warmup: [
+      'Raise: 3–5 min easy bike / row to break a light sweat',
+      'Cat-cow ×8, then bird-dogs ×8/side — brace, don’t sag ⚠️',
+      'Glute bridges ×15 (wake the glutes before you hinge)',
+      'Hip CARs ×5/side + 90/90 transitions ×8',
+      'Leg swings ×10/side + bodyweight squats ×10',
+      'Potentiate: 2–3 light ramp-up sets on the trap-bar RDL — groove the hinge first ⚠️',
+    ],
     exercises: [
       {
         id: 'd2-trap-rdl',
         name: 'Trap Bar Romanian Deadlift',
-        equipment: 'Trap (hex) bar',
+        equipment: 'REP Open Trap Bar',
         targetSets: 3,
         repRange: '6–8',
         restSec: 120,
@@ -149,7 +185,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-bulgarian',
         name: 'Dumbbell Bulgarian Split Squat',
-        equipment: 'Dumbbells · bench',
+        equipment: 'Dumbbells (5–100 lb) · bench',
         targetSets: 3,
         repRange: '8–10 / leg',
         restSec: 90,
@@ -163,7 +199,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-hip-thrust',
         name: 'Hip Thrust',
-        equipment: 'Barbell · bench · hip pad',
+        equipment: 'Texas Power Bar · bench · hip pad',
         targetSets: 3,
         repRange: '8–12',
         restSec: 90,
@@ -177,7 +213,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-woodchopper',
         name: 'Cable Woodchopper',
-        equipment: 'Cable · D-handle',
+        equipment: 'Sorinex functional trainer · single handle (alt: PureTorque PRO for golf rotation)',
         targetSets: 3,
         repRange: '10 / side',
         restSec: 60,
@@ -191,7 +227,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-med-ball-throw',
         name: 'Medicine-Ball Rotational Throw',
-        equipment: 'Medicine ball · wall',
+        equipment: 'Wall / medicine ball · wall (REP slam balls)',
         targetSets: 3,
         repRange: '5 / side',
         restSec: 60,
@@ -205,7 +241,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-suitcase-carry',
         name: 'Suitcase Carry',
-        equipment: 'One heavy dumbbell or kettlebell',
+        equipment: 'One heavy dumbbell or kettlebell (alt: REP Open Trap Bar)',
         targetSets: 3,
         repRange: '40 yd / side',
         restSec: 60,
@@ -223,11 +259,18 @@ export const DAYS: Day[] = [
     title: 'Day 3 · Back + Chest Pump',
     focus: 'Pull strength + 2nd upper-chest hit',
     tracked: true,
+    warmup: [
+      'Raise: 3–5 min easy bike / row to break a light sweat',
+      'Band pull-aparts ×20 + face-pull pulses ×15',
+      'Cat-cow ×8 + thoracic rotations ×8/side',
+      'Dead hang ×20s, then scap pull-ups ×8',
+      'Potentiate: 2 ramp-up sets before your working pull-ups',
+    ],
     exercises: [
       {
         id: 'd3-pullup',
         name: 'Pull-Up',
-        equipment: 'Pull-up bar',
+        equipment: 'Pull-up bar (Angles90 grips optional)',
         targetSets: 4,
         repRange: '6–10',
         restSec: 120,
@@ -240,7 +283,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-chest-row',
         name: 'Chest-Supported Row',
-        equipment: 'Chest-supported row machine (or incline bench + DBs)',
+        equipment: 'Incline bench + dumbbells (alt: Sorinex cable row · Rogue Rotating V-Grip)',
         targetSets: 3,
         repRange: '8–12',
         restSec: 90,
@@ -253,7 +296,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-incline-fly',
         name: 'Incline Cable Fly (lighter)',
-        equipment: 'Cable · 2 D-handles · low pulleys',
+        equipment: 'Sorinex functional trainer · low pulleys + handles (alt: Tonal)',
         targetSets: 3,
         repRange: '12–15',
         restSec: 60,
@@ -267,7 +310,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-lat-pulldown',
         name: 'Lat Pulldown',
-        equipment: 'Lat pulldown · wide bar',
+        equipment: 'Sorinex functional trainer · MostGrip lat bar (alt: Tonal)',
         targetSets: 3,
         repRange: '10–12',
         restSec: 60,
@@ -281,7 +324,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-face-pull',
         name: 'Face Pull',
-        equipment: 'Cable · rope · upper pulley',
+        equipment: 'Sorinex functional trainer · Spiral Strength rope, upper pulley (alt: bands)',
         targetSets: 3,
         repRange: '15–20',
         restSec: 45,
@@ -295,7 +338,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-ab-wheel',
         name: 'Ab Wheel Rollout',
-        equipment: 'Ab wheel',
+        equipment: 'Ab roller / ab wheel',
         targetSets: 3,
         repRange: '8–12',
         restSec: 60,
@@ -325,11 +368,18 @@ export const DAYS: Day[] = [
     title: 'Day 5 · Chest Volume + Shoulders + Arms',
     focus: '3rd chest exposure',
     tracked: true,
+    warmup: [
+      'Raise: 3–5 min easy bike / row to break a light sweat',
+      'Band pull-aparts ×20',
+      'Shoulder CARs ×5/side + cuff external rotations ×15',
+      'Scap push-ups ×10, then 10 push-ups',
+      'Potentiate: 2 ramp-up sets on the incline press',
+    ],
     exercises: [
       {
         id: 'd5-incline-bb-press',
         name: 'Incline Barbell Press',
-        equipment: 'Barbell · rack w/ safeties · bench 30–45°',
+        equipment: 'Texas Power Bar · Sorinex rack safeties · bench 30–45° (alt: Kabuki bar)',
         targetSets: 4,
         repRange: '8–10',
         restSec: 120,
@@ -343,7 +393,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-flat-db-press',
         name: 'Flat Dumbbell Press',
-        equipment: 'Dumbbells · flat bench',
+        equipment: 'Dumbbells (5–100 lb) · flat bench',
         targetSets: 3,
         repRange: '10–12',
         restSec: 90,
@@ -356,7 +406,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-cable-fly-mid',
         name: 'Cable Fly (mid height)',
-        equipment: 'Cable · 2 D-handles · chest-height pulleys',
+        equipment: 'Sorinex functional trainer · chest-height pulleys + handles (alt: Tonal)',
         targetSets: 3,
         repRange: '12–15',
         restSec: 60,
@@ -370,7 +420,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-db-shoulder-press',
         name: 'Dumbbell Shoulder Press',
-        equipment: 'Dumbbells · upright bench',
+        equipment: 'Dumbbells (5–100 lb) · upright bench',
         targetSets: 3,
         repRange: '8–12',
         restSec: 90,
@@ -383,7 +433,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-lateral-raise',
         name: 'Dumbbell Lateral Raise',
-        equipment: 'Dumbbells',
+        equipment: 'Dumbbells (alt: Sorinex cable · single handle)',
         targetSets: 3,
         repRange: '15–20',
         restSec: 60,
@@ -397,13 +447,31 @@ export const DAYS: Day[] = [
       {
         id: 'd5-biceps-curl',
         name: 'Dumbbell Biceps Curl',
-        equipment: 'Dumbbells',
+        equipment: 'Dumbbells (alt: Rogue curl-bar cable attachment)',
         targetSets: 3,
         repRange: '10–12',
         restSec: 60,
         form: [
           { text: 'Elbows pinned to your sides, no swinging.' },
           { text: 'Curl, squeeze, control down to a full stretch.' },
+        ],
+      },
+      {
+        id: 'd5-weighted-dip',
+        name: 'Weighted Dip (optional finisher)',
+        optional: true,
+        equipment: 'Dip station (Rogue Mutant Metals) · belt + plate to load',
+        targetSets: 2,
+        repRange: '8–12',
+        restSec: 90,
+        why: 'Optional chest/triceps finisher now that the dip station is in. A slight forward lean loads the lower/mid chest and triceps — quality pressing volume to cap the day.',
+        form: [
+          { text: 'Slight forward lean for chest, more upright for triceps; shoulders down, no shrug.' },
+          {
+            text: 'Lower until the upper arms reach about parallel — don’t dive past a comfortable shoulder stretch.',
+            care: true,
+          },
+          { text: 'Press to a strong lockout; add load with a dip belt once bodyweight is easy.' },
         ],
       },
     ],
@@ -439,23 +507,75 @@ export const SUPPLEMENTS: string[] = [
   'TRT injection (per my own schedule)',
 ]
 
-// Full home-gym inventory the program draws on (shown on the Reference screen).
-export const EQUIPMENT_INVENTORY: string[] = [
-  'Adjustable bench (incline 30–45° + flat)',
-  'Barbell + power/squat rack with safety pins',
-  'Trap (hex) bar',
-  'Dumbbells (full range, light → heavy)',
-  'Cable machine / functional trainer (dual adjustable pulleys)',
-  'Cable attachments: 2× D-handles, rope, wide lat bar',
-  'Pull-up bar',
-  'Dip station',
-  'Chest-supported row machine (or incline bench + DBs)',
-  'Lat pulldown station',
-  'Medicine ball',
-  'Kettlebell',
-  'Ab wheel',
-  'Sled',
-  'Infrared sauna + cold plunge',
+// Full home-gym inventory, categorized (shown on the Reference screen).
+// (incoming) items are wired in as optional alternates only.
+export type EquipmentGroup = { category: string; items: string[] }
+export const EQUIPMENT_INVENTORY: EquipmentGroup[] = [
+  {
+    category: 'Rack & cable machines',
+    items: [
+      'Sorinex rack + functional trainer (dual adjustable cable column)',
+      'Tonal (digital cable trainer — eccentric/overload modes)',
+      'Voltra I — Beyond Power (portable smart cable) — incoming',
+      'Sorinex rack attachments (press/row/jammer variations)',
+    ],
+  },
+  {
+    category: 'Barbells & specialty bars',
+    items: [
+      'Texas Power Bar',
+      'Kabuki / Rogue specialty bar (Transformer or Duffalo)',
+      'REP Open Trap Bar',
+      'Darko shorty bar',
+      'Landmine attachment',
+    ],
+  },
+  {
+    category: 'Free weights & implements',
+    items: [
+      'Dumbbells, 5–100 lb',
+      'Kettlebells',
+      'Wall balls / medicine balls',
+      'REP weighted slam balls',
+      'Stability balls',
+    ],
+  },
+  {
+    category: 'Cable attachments & grips',
+    items: [
+      'Mutant Metals ARC attachment (swappable handles/angles)',
+      'Rogue Rotating V-Grip',
+      'Angles90 grips',
+      'MostGrip lat pulldown bars',
+      'Korikahm adjustable lat handles',
+      'Spiral Strength chalky tricep rope',
+      'Spud Inc long strap',
+      'Rogue curl-bar cable attachment',
+    ],
+  },
+  {
+    category: 'Core & rotation',
+    items: ['PureTorque PRO Ab Trainer (rotational core)', 'Ab roller / ab wheel'],
+  },
+  {
+    category: 'Conditioning & bodyweight',
+    items: [
+      'Torque Tank M1 sled',
+      'Rogue Mutant Metals dip station',
+      'RELIFE Rebuild dip bars',
+      'Pull-up bar',
+      'Resistance bands',
+    ],
+  },
+  {
+    category: 'Recovery & other',
+    items: [
+      'Sunlighten mPulse infrared sauna',
+      'ColdLife cold plunge',
+      'Golf simulator',
+      'Treadmill',
+    ],
+  },
 ]
 
 export const MEDICAL_DISCLAIMER =

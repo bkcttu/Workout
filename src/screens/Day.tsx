@@ -225,6 +225,13 @@ function SoloBlock({ ex, number, defaultOpen }: { ex: Exercise; number: string; 
         subtitle={`${ex.targetSets} × ${ex.repRange} · rest ${ex.restSec}s`}
         complete={log.complete}
         open={open}
+        badge={
+          ex.optional ? (
+            <span className="ml-2 rounded bg-brass/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brass">
+              optional
+            </span>
+          ) : undefined
+        }
         onToggle={() => setOpen((o) => !o)}
       />
       {open && (
@@ -368,6 +375,58 @@ function groupExercises(exs: Exercise[]): Group[] {
   return groups
 }
 
+function WarmUp({ items }: { items: string[] }) {
+  const [open, setOpen] = useState(false)
+  const [checks, setChecks] = useState<boolean[]>(() => items.map(() => false))
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-3 p-4 text-left active:bg-surface-raised"
+      >
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-surface-raised text-base">
+          🔥
+        </span>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base font-bold leading-tight text-text">Warm-up</h3>
+          <p className="text-xs text-muted">RAMP · prime the lifts, don’t fatigue them</p>
+        </div>
+        <span className="text-muted">{open ? '▾' : '▸'}</span>
+      </button>
+      {open && (
+        <div className="border-t border-border p-2">
+          {items.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => setChecks((c) => c.map((v, j) => (j === i ? !v : v)))}
+              className="flex w-full items-center gap-3 rounded-xl p-3 text-left active:bg-surface-raised"
+            >
+              <span
+                className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border text-sm ${
+                  checks[i] ? 'border-brass bg-brass/20 text-brass' : 'border-border text-muted'
+                }`}
+              >
+                {checks[i] ? '✓' : ''}
+              </span>
+              <span
+                className={`text-sm ${
+                  checks[i]
+                    ? 'text-muted line-through'
+                    : item.includes('⚠️')
+                      ? 'text-care'
+                      : 'text-text'
+                }`}
+              >
+                {item}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function Freestyle({ dayId, items }: { dayId: string; items: string[] }) {
   const { store, setStore } = useStore()
   const navigate = useNavigate()
@@ -455,6 +514,7 @@ export default function Day() {
       <div className="mt-4">
         {day.tracked ? (
           <div className="space-y-3">
+            {day.warmup && day.warmup.length > 0 && <WarmUp items={day.warmup} />}
             {groups.map((g, idx) =>
               g.kind === 'super' ? (
                 <SupersetBlock
