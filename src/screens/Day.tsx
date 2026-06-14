@@ -9,6 +9,7 @@ import {
   type MuscleId,
 } from '../data/plan'
 import BodyMap, { bestView } from '../components/BodyMap'
+import { demoFor, isGif } from '../lib/demos'
 import { useStore } from '../lib/StoreContext'
 import { useTimer } from '../lib/TimerContext'
 import { useWakeLock } from '../lib/useWakeLock'
@@ -186,9 +187,11 @@ function SetGrid({
 
 function ExerciseDetail({ ex }: { ex: Exercise }) {
   const [showMap, setShowMap] = useState(false)
+  const [showDemo, setShowDemo] = useState(false)
   const log = useExerciseLog(ex)
   const primary = ex.muscles?.primary ?? []
   const secondary = ex.muscles?.secondary ?? []
+  const demo = demoFor(ex.id) ?? ex.demoGif
 
   return (
     <div className="pt-1">
@@ -213,16 +216,14 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
       </ul>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        <a
-          href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-            ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
-        >
-          <Play size={13} /> Demo
-        </a>
+        {demo && (
+          <button
+            onClick={() => setShowDemo((s) => !s)}
+            className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
+          >
+            <Play size={13} /> Demo <ChevronDown size={13} className={showDemo ? 'rotate-180' : ''} />
+          </button>
+        )}
         <button
           onClick={() => setShowMap((s) => !s)}
           className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
@@ -231,16 +232,25 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
         </button>
       </div>
 
-      {showMap && (
-        <div className="mt-3 rounded-card bg-surface-raised/60 p-4">
-          {ex.demoGif && (
-            <img
-              src={ex.demoGif}
-              alt={`${ex.name} demo`}
-              className="mx-auto mb-3 max-h-48 rounded-ctl"
-              loading="lazy"
+      {demo && showDemo && (
+        <div className="mt-3 overflow-hidden rounded-card bg-surface-raised/60 p-2">
+          {isGif(demo) ? (
+            <img src={demo} alt={`${ex.name} demo`} className="mx-auto max-h-64 rounded-ctl" loading="lazy" />
+          ) : (
+            <video
+              src={demo}
+              className="mx-auto max-h-64 rounded-ctl"
+              autoPlay
+              loop
+              muted
+              playsInline
             />
           )}
+        </div>
+      )}
+
+      {showMap && (
+        <div className="mt-3 rounded-card bg-surface-raised/60 p-4">
           <BodyMap values={muscleValues(ex)} />
           <div className="mt-3 space-y-1 text-xs">
             <p>

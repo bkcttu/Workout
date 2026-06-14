@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import { ChevronDown, Play } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { DAYS, MUSCLE_LABELS, type Exercise, type MuscleId } from '../data/plan'
 import BodyMap, { bestView } from '../components/BodyMap'
+import { demoFor, isGif } from '../lib/demos'
 
 type Part = 'All' | 'Chest' | 'Back' | 'Shoulders' | 'Arms' | 'Core' | 'Legs'
 
@@ -56,6 +57,7 @@ function Item({ entry }: { entry: (typeof CATALOG)[number] }) {
   const { ex, days } = entry
   const primary = ex.muscles?.primary ?? []
   const secondary = ex.muscles?.secondary ?? []
+  const demo = demoFor(ex.id) ?? ex.demoGif
 
   return (
     <div className="px-4">
@@ -101,18 +103,17 @@ function Item({ entry }: { entry: (typeof CATALOG)[number] }) {
               Secondary: {secondary.map((mu) => MUSCLE_LABELS[mu]).join(', ')}
             </p>
           )}
-          <div className="mt-3 flex items-center justify-between gap-2">
+          {demo && (
+            <div className="mt-3 overflow-hidden rounded-card bg-surface-raised/60 p-2">
+              {isGif(demo) ? (
+                <img src={demo} alt={`${ex.name} demo`} className="mx-auto max-h-56 rounded-ctl" loading="lazy" />
+              ) : (
+                <video src={demo} className="mx-auto max-h-56 rounded-ctl" autoPlay loop muted playsInline />
+              )}
+            </div>
+          )}
+          <div className="mt-3">
             <span className="eyebrow">In: {days.join(' · ')}</span>
-            <a
-              href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-                ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
-            >
-              <Play size={13} /> Demo
-            </a>
           </div>
         </div>
       )}
