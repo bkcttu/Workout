@@ -4,6 +4,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Relative base so the app works under a GitHub Pages subpath
+  // (https://<user>.github.io/workout/) as well as at a host root.
+  base: './',
   plugins: [
     react(),
     VitePWA({
