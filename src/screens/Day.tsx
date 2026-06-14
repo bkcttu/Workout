@@ -216,13 +216,24 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
       </ul>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        {demo && (
+        {demo ? (
           <button
             onClick={() => setShowDemo((s) => !s)}
             className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
           >
             <Play size={13} /> Demo <ChevronDown size={13} className={showDemo ? 'rotate-180' : ''} />
           </button>
+        ) : (
+          <a
+            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+              ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
+          >
+            <Play size={13} /> Demo
+          </a>
         )}
         <button
           onClick={() => setShowMap((s) => !s)}

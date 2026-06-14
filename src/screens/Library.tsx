@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Play } from 'lucide-react'
 import { DAYS, MUSCLE_LABELS, type Exercise, type MuscleId } from '../data/plan'
 import BodyMap, { bestView } from '../components/BodyMap'
 import { demoFor, isGif } from '../lib/demos'
@@ -112,8 +112,20 @@ function Item({ entry }: { entry: (typeof CATALOG)[number] }) {
               )}
             </div>
           )}
-          <div className="mt-3">
+          <div className="mt-3 flex items-center justify-between gap-2">
             <span className="eyebrow">In: {days.join(' · ')}</span>
+            {!demo && (
+              <a
+                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                  ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
+              >
+                <Play size={13} /> Demo
+              </a>
+            )}
           </div>
         </div>
       )}
