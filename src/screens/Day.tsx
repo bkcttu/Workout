@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, Check, ChevronDown, Play } from 'lucide-react'
 import {
   DAYS,
   MUSCLE_LABELS,
@@ -7,7 +8,7 @@ import {
   type FormPoint,
   type MuscleId,
 } from '../data/plan'
-import BodyMap from '../components/BodyMap'
+import BodyMap, { bestView } from '../components/BodyMap'
 import { useStore } from '../lib/StoreContext'
 import { useTimer } from '../lib/TimerContext'
 import { useWakeLock } from '../lib/useWakeLock'
@@ -20,23 +21,17 @@ import {
   type Store,
 } from '../lib/store'
 
-// Short rest taken *between* the two moves of a superset (A -> B).
 const SUPERSET_TRANSITION_SEC = 20
 
-// Build the current working set rows for an exercise: today's logged values if
-// present, otherwise prefilled from the previous session (not marked done).
 function buildSets(store: Store, ex: Exercise): SetLog[] {
   const today = todaySessionOf(store, ex.id)
   const prev = prevSessionOf(store, ex.id)
   const out: SetLog[] = []
   for (let i = 0; i < ex.targetSets; i++) {
-    if (today && today.sets[i]) {
-      out.push(today.sets[i])
-    } else if (prev && prev.sets[i]) {
+    if (today && today.sets[i]) out.push(today.sets[i])
+    else if (prev && prev.sets[i])
       out.push({ weight: prev.sets[i].weight, reps: prev.sets[i].reps, done: false })
-    } else {
-      out.push({ weight: null, reps: null, done: false })
-    }
+    else out.push({ weight: null, reps: null, done: false })
   }
   return out
 }
@@ -47,14 +42,25 @@ function num(v: string): number | null {
   return Number.isFinite(n) ? n : null
 }
 
-// Per-exercise logging state + mutators, backed by the store.
+function restLabel(sec: number): string {
+  const m = Math.floor(sec / 60)
+  const s = sec % 60
+  return m > 0 ? `${m}:${String(s).padStart(2, '0')}` : `${s}s`
+}
+
+function muscleValues(ex: Exercise): Partial<Record<MuscleId, number>> {
+  const values: Partial<Record<MuscleId, number>> = {}
+  ex.muscles?.secondary?.forEach((mu) => (values[mu] = 0.5))
+  ex.muscles?.primary.forEach((mu) => (values[mu] = 1))
+  return values
+}
+
 function useExerciseLog(ex: Exercise) {
   const { store, setStore } = useStore()
   const sets = buildSets(store, ex)
   const prev = prevSessionOf(store, ex.id)
   const today = todaySessionOf(store, ex.id)
-  const complete =
-    !!today && today.sets.length >= ex.targetSets && today.sets.every((s) => s.done)
+  const complete = !!today && today.sets.length >= ex.targetSets && today.sets.every((s) => s.done)
 
   const update = (i: number, patch: Partial<SetLog>) =>
     setStore((s) => {
@@ -69,30 +75,44 @@ function useExerciseLog(ex: Exercise) {
   return { sets, prev, complete, update, markDone }
 }
 
-function FormToggle({ form }: { form: FormPoint[] }) {
-  const [show, setShow] = useState(false)
+// ----- shared bits ----------------------------------------------------------
+
+function PrimaryButton({
+  children,
+  onClick,
+  className = '',
+}: {
+  children: React.ReactNode
+  onClick: () => void
+  className?: string
+}) {
   return (
-    <>
-      <button
-        onClick={() => setShow((f) => !f)}
-        className="mb-3 inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text active:bg-surface-raised"
-      >
-        Form {show ? '▾' : '▸'}
-      </button>
-      {show && (
-        <ul className="mb-4 space-y-2">
-          {form.map((fp, i) => (
-            <li
-              key={i}
-              className={`flex gap-2 text-sm ${fp.care ? 'font-medium text-care' : 'text-text'}`}
-            >
-              <span className="shrink-0">{fp.care ? '⚠️' : '•'}</span>
-              <span>{fp.text}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+    <button
+      onClick={onClick}
+      className={`press rounded-ctl py-3.5 text-sm font-bold uppercase tracking-wide text-bg ${className}`}
+      style={{ backgroundImage: 'linear-gradient(180deg, var(--accent-hot), var(--accent))' }}
+    >
+      {children}
+    </button>
+  )
+}
+
+function GhostButton({
+  children,
+  onClick,
+  className = '',
+}: {
+  children: React.ReactNode
+  onClick: () => void
+  className?: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`press rounded-ctl border border-hairline py-3 text-sm font-semibold text-text ${className}`}
+    >
+      {children}
+    </button>
   )
 }
 
@@ -103,51 +123,55 @@ function SetGrid({
   update,
 }: ReturnType<typeof useExerciseLog> & { ex: Exercise }) {
   return (
-    <>
-      <div className="grid grid-cols-[2rem_1fr_1fr_2.5rem] items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-muted">
+    <div className="mt-4">
+      <div className="eyebrow grid grid-cols-[2rem_1fr_1fr_3rem] items-center gap-3">
         <span>Set</span>
         <span>Weight</span>
         <span>Reps</span>
-        <span className="text-center">✓</span>
+        <span className="text-right">Done</span>
       </div>
-      <div className="mt-1 space-y-1.5">
+      <div className="mt-1">
         {sets.map((set, i) => {
           const last = prev?.sets[i]
           return (
-            <div key={i} className="grid grid-cols-[2rem_1fr_1fr_2.5rem] items-center gap-2">
-              <span className="tnum text-sm text-muted">{i + 1}</span>
+            <div
+              key={i}
+              className={`grid grid-cols-[2rem_1fr_1fr_3rem] items-center gap-3 py-1.5 transition-opacity ${
+                set.done ? 'opacity-55' : ''
+              }`}
+            >
+              <span className="tnum text-sm text-dim">{i + 1}</span>
               <input
                 inputMode="decimal"
                 type="number"
                 value={set.weight ?? ''}
                 onChange={(e) => update(i, { weight: num(e.target.value) })}
-                placeholder={last?.weight != null ? String(last.weight) : 'lbs'}
-                className="tnum h-12 w-full rounded-lg border border-border bg-bg px-2 text-center text-lg text-text"
+                placeholder={last?.weight != null ? String(last.weight) : '—'}
+                className="tnum w-full rounded-none border-0 border-b-2 border-hairline bg-transparent py-1.5 text-center text-[20px] text-text placeholder:text-dim focus:border-accent focus:outline-none"
               />
               <input
                 inputMode="numeric"
                 type="number"
                 value={set.reps ?? ''}
                 onChange={(e) => update(i, { reps: num(e.target.value) })}
-                placeholder={last?.reps != null ? String(last.reps) : 'reps'}
-                className="tnum h-12 w-full rounded-lg border border-border bg-bg px-2 text-center text-lg text-text"
+                placeholder={last?.reps != null ? String(last.reps) : '—'}
+                className="tnum w-full rounded-none border-0 border-b-2 border-hairline bg-transparent py-1.5 text-center text-[20px] text-text placeholder:text-dim focus:border-accent focus:outline-none"
               />
               <button
                 onClick={() => update(i, { done: !set.done })}
                 aria-label={`Set ${i + 1} done`}
-                className={`grid h-12 w-full place-items-center rounded-lg border text-lg ${
-                  set.done
-                    ? 'border-brass bg-brass/20 text-brass'
-                    : 'border-border bg-bg text-muted'
+                className={`press grid h-10 w-10 place-items-center justify-self-end rounded-ctl ${
+                  set.done ? 'text-bg' : 'border border-hairline text-dim'
                 }`}
+                style={set.done ? { background: 'var(--brass)' } : undefined}
               >
-                {set.done ? '✓' : ''}
+                <Check size={18} />
               </button>
             </div>
           )
         })}
       </div>
-      <p className="tnum mt-2 text-xs text-muted">
+      <p className="tnum mt-2 text-xs text-dim">
         {prev
           ? `Last (${prev.date}): ` +
             prev.sets
@@ -156,51 +180,84 @@ function SetGrid({
               .join('  ')
           : 'No previous data — set the baseline.'}
       </p>
-    </>
+    </div>
   )
 }
 
-function MusclesToggle({ ex }: { ex: Exercise }) {
-  const [show, setShow] = useState(false)
-  if (!ex.muscles) return null
-  const primary = ex.muscles.primary
-  const secondary = ex.muscles.secondary ?? []
-  const values: Partial<Record<MuscleId, number>> = {}
-  secondary.forEach((mu) => (values[mu] = 0.5))
-  primary.forEach((mu) => (values[mu] = 1)) // primary wins over secondary
+function ExerciseDetail({ ex }: { ex: Exercise }) {
+  const [showMap, setShowMap] = useState(false)
+  const log = useExerciseLog(ex)
+  const primary = ex.muscles?.primary ?? []
+  const secondary = ex.muscles?.secondary ?? []
 
   return (
-    <>
-      <button
-        onClick={() => setShow((s) => !s)}
-        className="mb-3 ml-2 inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text active:bg-surface-raised"
-      >
-        Muscles {show ? '▾' : '▸'}
-      </button>
-      {show && (
-        <div className="mb-4 rounded-xl border border-border bg-bg p-3">
-          {ex.demoGif ? (
+    <div className="pt-1">
+      {ex.equipment && (
+        <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-brass">
+          <span aria-hidden>🛠</span>
+          <span>{ex.equipment}</span>
+        </p>
+      )}
+      {ex.why && <p className="mb-3 text-sm italic text-ink2">{ex.why}</p>}
+
+      <ul className="space-y-2">
+        {ex.form.map((fp: FormPoint, i) => (
+          <li
+            key={i}
+            className={`flex gap-2 text-sm ${fp.care ? 'font-medium text-care' : 'text-text'}`}
+          >
+            <span className="shrink-0">{fp.care ? '⚠️' : '·'}</span>
+            <span>{fp.text}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <a
+          href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+            ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
+        >
+          <Play size={13} /> Demo
+        </a>
+        <button
+          onClick={() => setShowMap((s) => !s)}
+          className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-1.5 text-xs font-semibold text-text"
+        >
+          Muscles <ChevronDown size={13} className={showMap ? 'rotate-180' : ''} />
+        </button>
+      </div>
+
+      {showMap && (
+        <div className="mt-3 rounded-card bg-surface-raised/60 p-4">
+          {ex.demoGif && (
             <img
               src={ex.demoGif}
               alt={`${ex.name} demo`}
-              className="mx-auto mb-3 max-h-48 rounded-lg"
+              className="mx-auto mb-3 max-h-48 rounded-ctl"
               loading="lazy"
             />
-          ) : null}
-          <BodyMap values={values} />
+          )}
+          <BodyMap values={muscleValues(ex)} />
           <div className="mt-3 space-y-1 text-xs">
             <p>
-              <span className="mr-1 inline-block h-2.5 w-2.5 rounded-sm align-middle" style={{ background: 'var(--accent)' }} />
-              <span className="text-muted">Primary: </span>
+              <span
+                className="mr-1.5 inline-block h-2.5 w-2.5 rounded-sm align-middle"
+                style={{ background: 'var(--accent)' }}
+              />
+              <span className="text-dim">Primary: </span>
               <span className="text-text">{primary.map((mu) => MUSCLE_LABELS[mu]).join(', ')}</span>
             </p>
             {secondary.length > 0 && (
               <p>
                 <span
-                  className="mr-1 inline-block h-2.5 w-2.5 rounded-sm align-middle"
+                  className="mr-1.5 inline-block h-2.5 w-2.5 rounded-sm align-middle"
                   style={{ background: 'var(--accent)', opacity: 0.5 }}
                 />
-                <span className="text-muted">Secondary: </span>
+                <span className="text-dim">Secondary: </span>
                 <span className="text-text">
                   {secondary.map((mu) => MUSCLE_LABELS[mu]).join(', ')}
                 </span>
@@ -209,76 +266,57 @@ function MusclesToggle({ ex }: { ex: Exercise }) {
           </div>
         </div>
       )}
-    </>
-  )
-}
 
-// The inner logging content for a single exercise (no outer card/header).
-function ExerciseContent({ ex }: { ex: Exercise }) {
-  const log = useExerciseLog(ex)
-  return (
-    <div>
-      {ex.equipment && (
-        <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-brass">
-          <span aria-hidden>🛠</span>
-          <span>{ex.equipment}</span>
-        </p>
-      )}
-      {ex.why && <p className="mb-3 text-sm italic text-muted">{ex.why}</p>}
-      <FormToggle form={ex.form} />
-      <MusclesToggle ex={ex} />
-      <a
-        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-          ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
-        )}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mb-3 ml-2 inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text active:bg-surface-raised"
-      >
-        ▶ Demo
-      </a>
       <SetGrid ex={ex} {...log} />
     </div>
   )
 }
 
-function CardHeader({
+function ExerciseHeader({
+  ex,
   number,
-  title,
-  subtitle,
   complete,
   open,
   badge,
   onToggle,
 }: {
+  ex: Exercise
   number: string
-  title: React.ReactNode
-  subtitle: string
   complete: boolean
   open: boolean
   badge?: React.ReactNode
   onToggle: () => void
 }) {
   return (
-    <button
-      onClick={onToggle}
-      className="flex w-full items-center gap-3 p-4 text-left active:bg-surface-raised"
-    >
+    <button onClick={onToggle} className="press flex w-full items-center gap-3 py-4 text-left">
       <span
-        className={`tnum grid h-8 min-w-8 shrink-0 place-items-center rounded-lg px-1 text-sm font-bold ${
-          complete ? 'bg-brass/20 text-brass' : 'bg-surface-raised text-muted'
+        className={`tnum grid h-8 min-w-8 shrink-0 place-items-center rounded-ctl px-1 text-sm ${
+          complete ? 'text-bg' : 'bg-surface-raised text-dim'
         }`}
+        style={complete ? { background: 'var(--brass)' } : undefined}
       >
-        {complete ? '✓' : number}
+        {complete ? <Check size={16} /> : number}
       </span>
       <div className="min-w-0 flex-1">
-        <h3 className="text-base font-bold leading-tight text-text">
-          {title}
+        <div className="eyebrow truncate">
+          {ex.targetSets} × {ex.repRange} · REST {restLabel(ex.restSec)}
+        </div>
+        <h3 className="display text-[17px] leading-tight text-text">
+          {ex.name.replace(/ \(optional finisher\)/, '')}
           {badge}
         </h3>
-        <p className="tnum mt-0.5 text-xs text-muted">{subtitle}</p>
       </div>
-      <span className="text-muted">{open ? '▾' : '▸'}</span>
+      {ex.muscles && (
+        <div className="shrink-0 opacity-90">
+          <BodyMap
+            values={muscleValues(ex)}
+            view={bestView(ex.muscles.primary)}
+            size={40}
+            showLabels={false}
+          />
+        </div>
+      )}
+      <ChevronDown size={18} className={`shrink-0 text-dim ${open ? 'rotate-180' : ''}`} />
     </button>
   )
 }
@@ -289,16 +327,15 @@ function SoloBlock({ ex, number, defaultOpen }: { ex: Exercise; number: string; 
   const log = useExerciseLog(ex)
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-      <CardHeader
+    <div className="px-5">
+      <ExerciseHeader
+        ex={ex}
         number={number}
-        title={ex.name}
-        subtitle={`${ex.targetSets} × ${ex.repRange} · rest ${ex.restSec}s`}
         complete={log.complete}
         open={open}
         badge={
           ex.optional ? (
-            <span className="ml-2 rounded bg-brass/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brass">
+            <span className="ml-2 rounded-full bg-brass/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brass">
               optional
             </span>
           ) : undefined
@@ -306,21 +343,13 @@ function SoloBlock({ ex, number, defaultOpen }: { ex: Exercise; number: string; 
         onToggle={() => setOpen((o) => !o)}
       />
       {open && (
-        <div className="border-t border-border p-4 pt-3">
-          <ExerciseContent ex={ex} />
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={() => timer.start(ex.restSec, ex.name)}
-              className="h-12 flex-1 rounded-xl bg-accent text-sm font-bold uppercase tracking-wide text-bg active:bg-accent-bright"
-            >
-              Start rest · {ex.restSec}s
-            </button>
-            <button
-              onClick={log.markDone}
-              className="h-12 flex-1 rounded-xl border border-border bg-surface-raised text-sm font-bold uppercase tracking-wide text-text active:bg-bg"
-            >
-              Exercise done
-            </button>
+        <div className="pb-5">
+          <ExerciseDetail ex={ex} />
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <PrimaryButton onClick={() => timer.start(ex.restSec, ex.name)}>
+              Rest · {restLabel(ex.restSec)}
+            </PrimaryButton>
+            <GhostButton onClick={log.markDone}>Exercise done</GhostButton>
           </div>
         </div>
       )}
@@ -346,74 +375,66 @@ function SupersetBlock({
   const complete = logA.complete && logB.complete
   const roundRest = Math.max(a.restSec, b.restSec)
 
-  const markRoundDone = () => {
-    logA.markDone()
-    logB.markDone()
-  }
-
   return (
-    <div className="overflow-hidden rounded-2xl border border-accent/40 bg-surface">
-      <CardHeader
-        number={number}
-        title={`${a.name}  ⇄  ${b.name}`}
-        subtitle={`Superset · round rest ${roundRest}s`}
-        complete={complete}
-        open={open}
-        badge={
-          <span className="ml-2 rounded bg-accent/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent">
-            superset
-          </span>
-        }
-        onToggle={() => setOpen((o) => !o)}
-      />
+    <div className="px-5">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="press flex w-full items-center gap-3 py-4 text-left"
+      >
+        <span
+          className={`tnum grid h-8 min-w-8 shrink-0 place-items-center rounded-ctl px-1 text-sm ${
+            complete ? 'text-bg' : 'bg-surface-raised text-dim'
+          }`}
+          style={complete ? { background: 'var(--brass)' } : undefined}
+        >
+          {complete ? <Check size={16} /> : number}
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="eyebrow">Superset · round rest {restLabel(roundRest)}</div>
+          <h3 className="display text-[16px] leading-tight text-text">
+            {a.name} <span className="text-accent">⇄</span> {b.name}
+          </h3>
+        </div>
+        <ChevronDown size={18} className={`shrink-0 text-dim ${open ? 'rotate-180' : ''}`} />
+      </button>
+
       {open && (
-        <div className="border-t border-border p-4 pt-3">
-          {/* Move A */}
+        <div className="pb-5">
           <div className="mb-1 flex items-center gap-2">
             <span className="grid h-6 w-6 place-items-center rounded-md bg-accent/15 text-xs font-bold text-accent">
               A
             </span>
-            <span className="text-sm font-bold text-text">{a.name}</span>
-            <span className="tnum ml-auto text-xs text-muted">
-              {a.targetSets} × {a.repRange}
-            </span>
+            <span className="display text-sm text-text">{a.name}</span>
           </div>
-          <ExerciseContent ex={a} />
+          <ExerciseDetail ex={a} />
 
-          {/* Transition: short rest, then go to B */}
           <button
             onClick={() => timer.start(SUPERSET_TRANSITION_SEC, `→ ${b.name}`)}
-            className="my-4 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-accent/50 py-2.5 text-xs font-semibold uppercase tracking-wide text-accent active:bg-surface-raised"
+            className="press my-4 flex w-full items-center justify-center gap-1.5 rounded-ctl border border-dashed border-accent/50 py-2.5 text-xs font-semibold uppercase tracking-wide text-accent"
           >
             ↓ short rest {SUPERSET_TRANSITION_SEC}s · then move B
           </button>
 
-          {/* Move B */}
           <div className="mb-1 flex items-center gap-2">
             <span className="grid h-6 w-6 place-items-center rounded-md bg-accent/15 text-xs font-bold text-accent">
               B
             </span>
-            <span className="text-sm font-bold text-text">{b.name}</span>
-            <span className="tnum ml-auto text-xs text-muted">
-              {b.targetSets} × {b.repRange}
-            </span>
+            <span className="display text-sm text-text">{b.name}</span>
           </div>
-          <ExerciseContent ex={b} />
+          <ExerciseDetail ex={b} />
 
-          {/* Round actions */}
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={() => timer.start(roundRest, `Superset round`)}
-              className="h-12 flex-1 rounded-xl bg-accent text-sm font-bold uppercase tracking-wide text-bg active:bg-accent-bright"
-            >
-              Round rest · {roundRest}s
-            </button>
-            <button
-              onClick={markRoundDone}
-              className="h-12 flex-1 rounded-xl border border-border bg-surface-raised text-sm font-bold uppercase tracking-wide text-text active:bg-bg"
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <PrimaryButton onClick={() => timer.start(roundRest, 'Superset round')}>
+              Round rest · {restLabel(roundRest)}
+            </PrimaryButton>
+            <GhostButton
+              onClick={() => {
+                logA.markDone()
+                logB.markDone()
+              }}
             >
               Round done
-            </button>
+            </GhostButton>
           </div>
         </div>
       )}
@@ -421,8 +442,6 @@ function SupersetBlock({
   )
 }
 
-// Group consecutive exercises into solo blocks and superset pairs. A
-// superset-flagged exercise pairs with the exercise immediately after it.
 type Group =
   | { kind: 'solo'; ex: Exercise; number: string }
   | { kind: 'super'; a: Exercise; b: Exercise; number: string }
@@ -450,42 +469,34 @@ function WarmUp({ items }: { items: string[] }) {
   const [open, setOpen] = useState(false)
   const [checks, setChecks] = useState<boolean[]>(() => items.map(() => false))
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-3 p-4 text-left active:bg-surface-raised"
-      >
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-surface-raised text-base">
-          🔥
-        </span>
+    <div className="card overflow-hidden">
+      <button onClick={() => setOpen((o) => !o)} className="press flex w-full items-center gap-3 p-5 text-left">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-ctl bg-surface-raised">🔥</span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-bold leading-tight text-text">Warm-up</h3>
-          <p className="text-xs text-muted">RAMP · prime the lifts, don’t fatigue them</p>
+          <div className="eyebrow">RAMP · prime, don’t fatigue</div>
+          <h3 className="display text-[16px] leading-tight text-text">Warm-up</h3>
         </div>
-        <span className="text-muted">{open ? '▾' : '▸'}</span>
+        <ChevronDown size={18} className={`text-dim ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="border-t border-border p-2">
+        <div className="px-3 pb-3">
           {items.map((item, i) => (
             <button
               key={i}
               onClick={() => setChecks((c) => c.map((v, j) => (j === i ? !v : v)))}
-              className="flex w-full items-center gap-3 rounded-xl p-3 text-left active:bg-surface-raised"
+              className="press flex w-full items-center gap-3 rounded-ctl p-3 text-left"
             >
               <span
-                className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border text-sm ${
-                  checks[i] ? 'border-brass bg-brass/20 text-brass' : 'border-border text-muted'
+                className={`grid h-6 w-6 shrink-0 place-items-center rounded-md ${
+                  checks[i] ? 'text-bg' : 'border border-hairline text-dim'
                 }`}
+                style={checks[i] ? { background: 'var(--brass)' } : undefined}
               >
-                {checks[i] ? '✓' : ''}
+                {checks[i] ? <Check size={14} /> : ''}
               </span>
               <span
                 className={`text-sm ${
-                  checks[i]
-                    ? 'text-muted line-through'
-                    : item.includes('⚠️')
-                      ? 'text-care'
-                      : 'text-text'
+                  checks[i] ? 'text-dim line-through' : item.includes('⚠️') ? 'text-care' : 'text-text'
                 }`}
               >
                 {item}
@@ -505,40 +516,36 @@ function Freestyle({ dayId, items }: { dayId: string; items: string[] }) {
   const completed = store.dayCompleted[dayId]
 
   return (
-    <div className="space-y-3">
-      <div className="rounded-2xl border border-border bg-surface p-2">
+    <div className="space-y-4">
+      <div className="card overflow-hidden p-2">
         {items.map((item, i) => (
           <button
             key={i}
             onClick={() => setChecks((c) => c.map((v, j) => (j === i ? !v : v)))}
-            className="flex w-full items-center gap-3 rounded-xl p-3 text-left active:bg-surface-raised"
+            className="press flex w-full items-center gap-3 rounded-ctl p-3 text-left"
           >
             <span
-              className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border text-sm ${
-                checks[i] ? 'border-brass bg-brass/20 text-brass' : 'border-border text-muted'
+              className={`grid h-7 w-7 shrink-0 place-items-center rounded-md ${
+                checks[i] ? 'text-bg' : 'border border-hairline text-dim'
               }`}
+              style={checks[i] ? { background: 'var(--brass)' } : undefined}
             >
-              {checks[i] ? '✓' : ''}
+              {checks[i] ? <Check size={15} /> : ''}
             </span>
-            <span className={checks[i] ? 'text-muted line-through' : 'text-text'}>{item}</span>
+            <span className={checks[i] ? 'text-dim line-through' : 'text-text'}>{item}</span>
           </button>
         ))}
       </div>
-      <button
+      <PrimaryButton
+        className="w-full"
         onClick={() => {
-          setStore((s) => ({
-            ...s,
-            dayCompleted: { ...s.dayCompleted, [dayId]: todayISO() },
-          }))
+          setStore((s) => ({ ...s, dayCompleted: { ...s.dayCompleted, [dayId]: todayISO() } }))
           navigate('/')
         }}
-        className="h-14 w-full rounded-xl bg-accent text-base font-bold uppercase tracking-wide text-bg active:bg-accent-bright"
       >
         Mark day complete
-      </button>
-      {completed && (
-        <p className="tnum text-center text-xs text-brass">Last completed {completed}</p>
-      )}
+      </PrimaryButton>
+      {completed && <p className="tnum text-center text-xs text-brass">Last completed {completed}</p>}
     </div>
   )
 }
@@ -552,8 +559,8 @@ export default function Day() {
 
   if (!day) {
     return (
-      <div className="safe-top px-4">
-        <p className="text-muted">Day not found.</p>
+      <div className="safe-top px-5">
+        <p className="text-ink2">Day not found.</p>
         <Link to="/" className="text-accent">
           ← Home
         </Link>
@@ -565,60 +572,55 @@ export default function Day() {
   const groups = day.tracked ? groupExercises(day.exercises ?? []) : []
 
   return (
-    <div className="safe-top px-4">
-      <header className="sticky top-0 z-30 -mx-4 border-b border-border bg-bg/95 px-4 py-3 backdrop-blur">
-        <div className="flex items-center gap-2">
+    <div className="safe-top px-5">
+      <header className="sticky top-0 z-30 -mx-5 mb-4 bg-bg/85 px-5 py-3 backdrop-blur-md">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/')}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border text-text active:bg-surface"
+            className="press grid h-9 w-9 shrink-0 place-items-center rounded-ctl border border-hairline text-text"
             aria-label="Back"
           >
-            ←
+            <ArrowLeft size={18} />
           </button>
           <div className="min-w-0">
-            <h1 className="display truncate text-lg leading-tight text-text">{day.title}</h1>
-            <p className="truncate text-xs text-muted">{day.focus}</p>
+            <div className="eyebrow truncate">{day.focus}</div>
+            <h1 className="display truncate text-[20px] leading-tight text-text">
+              {day.title.replace(/^Day \d+ · /, '')}
+            </h1>
           </div>
         </div>
       </header>
 
-      <div className="mt-4">
-        {day.tracked ? (
-          <div className="space-y-3">
-            {day.warmup && day.warmup.length > 0 && <WarmUp items={day.warmup} />}
-            {groups.map((g, idx) =>
-              g.kind === 'super' ? (
-                <SupersetBlock
-                  key={g.a.id}
-                  a={g.a}
-                  b={g.b}
-                  number={g.number}
-                  defaultOpen={idx === 0}
-                />
-              ) : (
-                <SoloBlock key={g.ex.id} ex={g.ex} number={g.number} defaultOpen={idx === 0} />
-              ),
-            )}
-            <button
-              onClick={() => {
-                setStore((s) => ({
-                  ...s,
-                  dayCompleted: { ...s.dayCompleted, [day.id]: todayISO() },
-                }))
-                navigate('/')
-              }}
-              className="h-14 w-full rounded-xl bg-accent text-base font-bold uppercase tracking-wide text-bg active:bg-accent-bright"
-            >
-              Mark day complete
-            </button>
-            {completed && (
-              <p className="tnum text-center text-xs text-brass">Last completed {completed}</p>
-            )}
+      {day.tracked ? (
+        <div className="space-y-4">
+          {day.warmup && day.warmup.length > 0 && <WarmUp items={day.warmup} />}
+          <div className="card overflow-hidden">
+            {groups.map((g, idx) => (
+              <div key={g.kind === 'super' ? g.a.id : g.ex.id} className={idx > 0 ? 'border-t border-hairline' : ''}>
+                {g.kind === 'super' ? (
+                  <SupersetBlock a={g.a} b={g.b} number={g.number} defaultOpen={idx === 0} />
+                ) : (
+                  <SoloBlock ex={g.ex} number={g.number} defaultOpen={idx === 0} />
+                )}
+              </div>
+            ))}
           </div>
-        ) : (
-          <Freestyle dayId={day.id} items={day.checklist ?? []} />
-        )}
-      </div>
+          <PrimaryButton
+            className="w-full"
+            onClick={() => {
+              setStore((s) => ({ ...s, dayCompleted: { ...s.dayCompleted, [day.id]: todayISO() } }))
+              navigate('/')
+            }}
+          >
+            Mark day complete
+          </PrimaryButton>
+          {completed && (
+            <p className="tnum text-center text-xs text-brass">Last completed {completed}</p>
+          )}
+        </div>
+      ) : (
+        <Freestyle dayId={day.id} items={day.checklist ?? []} />
+      )}
     </div>
   )
 }

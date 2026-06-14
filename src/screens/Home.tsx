@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { ChevronRight, Check } from 'lucide-react'
 import { APP_NAME, DAYS, MUSCLE_LABELS, type MuscleId } from '../data/plan'
 import { useStore } from '../lib/StoreContext'
 import { hydrationGoal, prettyDate, proteinTotal, todayISO } from '../lib/store'
@@ -17,7 +18,6 @@ const WEEK_COUNTS: Partial<Record<MuscleId, number>> = (() => {
   )
   return counts
 })()
-
 const WEEK_MAX = Math.max(1, ...Object.values(WEEK_COUNTS))
 const WEEK_VALUES: Partial<Record<MuscleId, number>> = Object.fromEntries(
   Object.entries(WEEK_COUNTS).map(([k, v]) => [k, v / WEEK_MAX]),
@@ -47,144 +47,112 @@ export default function Home() {
   const proteinGoal = store.nutrition.proteinGoalG
 
   return (
-    <div className="safe-top px-4">
-      <header className="flex items-end justify-between pt-2">
-        <div>
-          <h1 className="display text-4xl text-text">
-            {APP_NAME}
-            <span className="text-accent">.</span>
-          </h1>
-          <p className="text-sm text-muted">
-            {today.toLocaleDateString(undefined, {
-              weekday: 'long',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
-        </div>
+    <div className="safe-top px-5">
+      <header className="pt-3">
+        <h1 className="display text-[34px] leading-none text-text">
+          {APP_NAME}
+          <span className="text-accent">.</span>
+        </h1>
+        <p className="tnum mt-1 text-xs text-dim">
+          {today
+            .toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })
+            .toUpperCase()}
+        </p>
       </header>
 
-      {/* compact rings */}
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <Link
-          to="/water"
-          className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-3 active:bg-surface-raised"
-        >
+      {/* Hero gauge rings */}
+      <section className="mt-6 grid grid-cols-2 gap-4">
+        <Link to="/water" className="press flex flex-col items-center">
           <RingProgress
             progress={waterGoal ? waterIntake / waterGoal : 0}
-            size={56}
-            stroke={6}
-            color={waterIntake >= waterGoal ? 'var(--brass)' : 'var(--accent)'}
+            size={132}
+            stroke={11}
+            color={waterIntake >= waterGoal ? 'var(--brass)' : undefined}
           >
-            <span className="text-base leading-none">💧</span>
+            <div>
+              <div className="tnum text-[26px] leading-none text-text">{waterIntake}</div>
+              <div className="tnum mt-0.5 text-[11px] text-dim">/ {waterGoal} oz</div>
+            </div>
           </RingProgress>
-          <div className="min-w-0">
-            <div className="text-[10px] font-semibold uppercase tracking-widest text-muted">
-              Water
-            </div>
-            <div className="tnum text-sm text-text">
-              {waterIntake}
-              <span className="text-muted">/{waterGoal} oz</span>
-            </div>
-          </div>
+          <span className="eyebrow mt-2">Water</span>
         </Link>
 
-        <Link
-          to="/fuel"
-          className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-3 active:bg-surface-raised"
-        >
+        <Link to="/fuel" className="press flex flex-col items-center">
           <RingProgress
             progress={proteinGoal ? protein / proteinGoal : 0}
-            size={56}
-            stroke={6}
-            color={protein >= proteinGoal ? 'var(--brass)' : 'var(--accent)'}
+            size={132}
+            stroke={11}
+            color={protein >= proteinGoal ? 'var(--brass)' : undefined}
           >
-            <span className="text-base leading-none">🍖</span>
+            <div>
+              <div className="tnum text-[26px] leading-none text-text">{protein}</div>
+              <div className="tnum mt-0.5 text-[11px] text-dim">/ {proteinGoal} g</div>
+            </div>
           </RingProgress>
-          <div className="min-w-0">
-            <div className="text-[10px] font-semibold uppercase tracking-widest text-muted">
-              Protein
-            </div>
-            <div className="tnum text-sm text-text">
-              {protein}
-              <span className="text-muted">/{proteinGoal} g</span>
-            </div>
-          </div>
+          <span className="eyebrow mt-2">Protein</span>
         </Link>
-      </div>
+      </section>
 
-      {/* day cards */}
-      <h2 className="mt-6 text-xs font-semibold uppercase tracking-widest text-muted">
-        Training week
-      </h2>
-      <div className="mt-2 space-y-3">
-        {DAYS.map((day) => {
+      {/* Day list */}
+      <h2 className="eyebrow mt-8">Training week</h2>
+      <div className="card mt-3 overflow-hidden">
+        {DAYS.map((day, i) => {
           const completed = daysAgoLabel(store.dayCompleted[day.id])
           return (
             <Link
               key={day.id}
               to={`/day/${day.id}`}
-              className="block rounded-2xl border border-border bg-surface p-4 active:bg-surface-raised"
+              className={`press relative flex items-center gap-3 py-4 pl-5 pr-4 ${
+                i > 0 ? 'border-t border-hairline' : ''
+              }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <h3 className="display text-lg leading-tight text-text">{day.title}</h3>
-                  <p className="mt-0.5 text-sm text-muted">{day.focus}</p>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  {!day.tracked && (
-                    <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted">
-                      Freestyle
-                    </span>
-                  )}
-                  {completed && (
-                    <span className="tnum rounded-full bg-brass/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brass">
-                      ✓ {completed}
-                    </span>
-                  )}
-                </div>
+              <span
+                className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full"
+                style={{ background: day.tracked ? 'var(--accent)' : 'var(--text-dim)' }}
+              />
+              <div className="min-w-0 flex-1">
+                <h3 className="display text-[17px] leading-tight text-text">
+                  {day.title.replace(/^Day \d+ · /, '')}
+                </h3>
+                <p className="mt-0.5 truncate text-sm text-ink2">{day.focus}</p>
               </div>
-              <p className="mt-2 text-xs text-muted">
-                {day.tracked
-                  ? `${day.exercises?.length ?? 0} exercises`
-                  : `${day.checklist?.length ?? 0} items`}
-              </p>
+              <div className="flex flex-col items-end gap-1">
+                {completed ? (
+                  <span className="tnum flex items-center gap-1 text-[11px] text-brass">
+                    <Check size={12} /> {completed}
+                  </span>
+                ) : (
+                  <span className="eyebrow">
+                    {day.tracked ? `${day.exercises?.length ?? 0} lifts` : 'Freestyle'}
+                  </span>
+                )}
+                <ChevronRight size={18} className="text-dim" />
+              </div>
             </Link>
           )
         })}
       </div>
 
       {/* Weekly muscle focus */}
-      <h2 className="mt-6 text-xs font-semibold uppercase tracking-widest text-muted">
-        This week’s muscle focus
-      </h2>
-      <div className="mt-2 rounded-2xl border border-border bg-surface p-4">
+      <h2 className="eyebrow mt-8">This week’s muscle focus</h2>
+      <div className="card mt-3 p-5">
         <BodyMap values={WEEK_VALUES} />
-        <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+        <div className="mt-4 flex flex-wrap justify-center gap-1.5">
           {WEEK_TOP.map(([mu]) => (
             <span
               key={mu}
-              className="rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-semibold text-accent"
+              className="rounded-full bg-accent/15 px-2.5 py-1 text-[11px] font-semibold text-accent"
             >
               {MUSCLE_LABELS[mu]}
             </span>
           ))}
         </div>
-        <p className="mt-2 text-center text-[11px] text-muted">
+        <p className="mt-3 text-center text-xs text-dim">
           Brighter = more weekly volume. Upper chest leads, by design.
         </p>
       </div>
 
-      <Link
-        to="/reference"
-        className="mt-4 block rounded-2xl border border-border bg-surface p-3 text-center text-sm font-semibold text-muted active:bg-surface-raised"
-      >
-        Reference · Nutrition & Supplements →
-      </Link>
-
-      <p className="mt-6 text-center text-[11px] text-muted">
-        Tracker, not medical guidance.
-      </p>
+      <p className="mt-8 text-center text-[11px] text-dim">Tracker, not medical guidance.</p>
     </div>
   )
 }

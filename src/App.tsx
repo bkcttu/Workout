@@ -3,6 +3,7 @@ import BottomNav from './components/BottomNav'
 import RestTimerBar from './components/RestTimerBar'
 import Home from './screens/Home'
 import Day from './screens/Day'
+import Library from './screens/Library'
 import Water from './screens/Water'
 import Fuel from './screens/Fuel'
 import Reference from './screens/Reference'
@@ -13,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/day/:dayId" element={<Day />} />
+        <Route path="/library" element={<Library />} />
         <Route path="/water" element={<Water />} />
         <Route path="/fuel" element={<Fuel />} />
         <Route path="/reference" element={<Reference />} />

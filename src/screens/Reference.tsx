@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Check, Download, Upload } from 'lucide-react'
 import {
   EQUIPMENT_INVENTORY,
   MEDICAL_DISCLAIMER,
@@ -30,10 +31,7 @@ export default function Reference() {
     if (!Number.isFinite(lbs) || lbs <= 0) return
     setStore((s) => ({
       ...s,
-      bodyweight: [
-        { date: today, lbs },
-        ...s.bodyweight.filter((b) => b.date !== today),
-      ].slice(0, 60),
+      bodyweight: [{ date: today, lbs }, ...s.bodyweight.filter((b) => b.date !== today)].slice(0, 60),
     }))
     setBw('')
   }
@@ -67,24 +65,18 @@ export default function Reference() {
   const recentBw = store.bodyweight.slice(0, 5)
 
   return (
-    <div className="safe-top px-4">
-      <h1 className="display pt-2 text-3xl text-text">Reference</h1>
+    <div className="safe-top px-5">
+      <h1 className="display pt-3 text-[34px] leading-none text-text">Reference</h1>
 
-      {/* Nutrition target */}
-      <section className="mt-4 rounded-2xl border border-border bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
-          Nutrition target
-        </h2>
-        <p className="mt-2 text-base font-bold text-text">{NUTRITION_TARGET.headline}</p>
-        <p className="mt-1 text-sm text-muted">{NUTRITION_TARGET.detail}</p>
+      <section className="card mt-6 p-5">
+        <h2 className="eyebrow text-accent">Nutrition target</h2>
+        <p className="mt-2 text-base font-semibold text-text">{NUTRITION_TARGET.headline}</p>
+        <p className="mt-1 text-sm text-ink2">{NUTRITION_TARGET.detail}</p>
       </section>
 
-      {/* Protein template */}
-      <section className="mt-3 rounded-2xl border border-border bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
-          Easy 200 g protein template
-        </h2>
-        <ul className="mt-2 space-y-1.5">
+      <section className="card mt-4 p-5">
+        <h2 className="eyebrow text-accent">Easy 200 g protein template</h2>
+        <ul className="mt-3 space-y-2">
           {PROTEIN_TEMPLATE.map((line, i) => (
             <li key={i} className="text-sm text-text">
               {line}
@@ -93,23 +85,21 @@ export default function Reference() {
         </ul>
       </section>
 
-      {/* Bodyweight quick-log */}
-      <section className="mt-3 rounded-2xl border border-border bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
-          Bodyweight (calorie gauge)
-        </h2>
-        <div className="mt-2 flex gap-2">
+      <section className="card mt-4 p-5">
+        <h2 className="eyebrow text-accent">Bodyweight (calorie gauge)</h2>
+        <div className="mt-3 flex items-end gap-3">
           <input
             inputMode="decimal"
             type="number"
             value={bw}
             onChange={(e) => setBw(e.target.value)}
             placeholder="lbs"
-            className="tnum h-12 flex-1 rounded-lg border border-border bg-bg px-3 text-lg text-text"
+            className="tnum w-full rounded-none border-0 border-b-2 border-hairline bg-transparent py-1.5 text-2xl text-text placeholder:text-dim focus:border-accent focus:outline-none"
           />
           <button
             onClick={logBw}
-            className="h-12 rounded-xl bg-accent px-5 text-sm font-bold uppercase tracking-wide text-bg active:bg-accent-bright"
+            className="press shrink-0 rounded-ctl px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-bg"
+            style={{ backgroundImage: 'linear-gradient(180deg, var(--accent-hot), var(--accent))' }}
           >
             Log
           </button>
@@ -117,7 +107,7 @@ export default function Reference() {
         {recentBw.length > 0 && (
           <div className="tnum mt-3 space-y-1 text-sm">
             {recentBw.map((b) => (
-              <div key={b.date} className="flex justify-between text-muted">
+              <div key={b.date} className="flex justify-between text-dim">
                 <span>{b.date}</span>
                 <span className="text-text">{b.lbs} lbs</span>
               </div>
@@ -126,47 +116,40 @@ export default function Reference() {
         )}
       </section>
 
-      {/* Supplement checklist */}
-      <section className="mt-3 rounded-2xl border border-border bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
-          Daily supplement checklist
-        </h2>
-        <div className="mt-2 space-y-1">
+      <section className="card mt-4 p-5">
+        <h2 className="eyebrow text-accent">Daily supplement checklist</h2>
+        <div className="mt-2 -mx-2">
           {SUPPLEMENTS.map((name) => {
             const done = doneToday.includes(name)
             return (
               <button
                 key={name}
                 onClick={() => toggleSupp(name)}
-                className="flex w-full items-center gap-3 rounded-xl p-2.5 text-left active:bg-surface-raised"
+                className="press flex w-full items-center gap-3 rounded-ctl px-2 py-2.5 text-left"
               >
                 <span
-                  className={`grid h-7 w-7 shrink-0 place-items-center rounded-md border text-sm ${
-                    done ? 'border-brass bg-brass/20 text-brass' : 'border-border text-muted'
+                  className={`grid h-7 w-7 shrink-0 place-items-center rounded-md ${
+                    done ? 'text-bg' : 'border border-hairline text-dim'
                   }`}
+                  style={done ? { background: 'var(--brass)' } : undefined}
                 >
-                  {done ? '✓' : ''}
+                  {done ? <Check size={15} /> : ''}
                 </span>
-                <span className={done ? 'text-muted line-through' : 'text-text'}>{name}</span>
+                <span className={done ? 'text-dim line-through' : 'text-text'}>{name}</span>
               </button>
             )
           })}
         </div>
-        <p className="mt-2 text-[11px] text-muted">Check-off only — no dosing advice.</p>
+        <p className="mt-2 text-[11px] text-dim">Check-off only — no dosing advice.</p>
       </section>
 
-      {/* Equipment inventory */}
-      <section className="mt-3 rounded-2xl border border-border bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
-          Gym equipment
-        </h2>
-        <div className="mt-2 space-y-3">
+      <section className="card mt-4 p-5">
+        <h2 className="eyebrow text-accent">Gym equipment</h2>
+        <div className="mt-3 space-y-4">
           {EQUIPMENT_INVENTORY.map((group) => (
             <div key={group.category}>
-              <h3 className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-                {group.category}
-              </h3>
-              <ul className="mt-1 space-y-1">
+              <h3 className="eyebrow">{group.category}</h3>
+              <ul className="mt-1.5 space-y-1.5">
                 {group.items.map((item) => (
                   <li key={item} className="flex gap-2 text-sm text-text">
                     <span className="shrink-0 text-brass">🛠</span>
@@ -177,28 +160,22 @@ export default function Reference() {
             </div>
           ))}
         </div>
-        <p className="mt-3 text-[11px] text-muted">
-          The full kit the program draws on. Each exercise lists the exact bar/attachment to grab.
-        </p>
       </section>
 
-      {/* Backup */}
-      <section className="mt-3 rounded-2xl border border-border bg-surface p-4">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
-          Backup & restore
-        </h2>
-        <div className="mt-2 flex gap-2">
+      <section className="card mt-4 p-5">
+        <h2 className="eyebrow text-accent">Backup & restore</h2>
+        <div className="mt-3 grid grid-cols-2 gap-2">
           <button
             onClick={exportData}
-            className="h-12 flex-1 rounded-xl border border-border bg-surface-raised text-sm font-semibold text-text active:bg-bg"
+            className="press flex items-center justify-center gap-1.5 rounded-ctl border border-hairline py-3 text-sm font-semibold text-text"
           >
-            Export JSON
+            <Download size={15} /> Export
           </button>
           <button
             onClick={() => fileRef.current?.click()}
-            className="h-12 flex-1 rounded-xl border border-border bg-surface-raised text-sm font-semibold text-text active:bg-bg"
+            className="press flex items-center justify-center gap-1.5 rounded-ctl border border-hairline py-3 text-sm font-semibold text-text"
           >
-            Import JSON
+            <Upload size={15} /> Import
           </button>
           <input
             ref={fileRef}
@@ -215,8 +192,8 @@ export default function Reference() {
         {msg && <p className="mt-2 text-xs text-brass">{msg}</p>}
       </section>
 
-      <p className="mt-4 text-center text-[11px] text-muted">{MEDICAL_DISCLAIMER}</p>
-      <p className="tnum mt-2 text-center text-[10px] text-muted">FORGE · build {__BUILD_ID__}</p>
+      <p className="mt-6 text-center text-[11px] text-dim">{MEDICAL_DISCLAIMER}</p>
+      <p className="tnum mt-2 text-center text-[10px] text-dim">FORGE · build {__BUILD_ID__}</p>
     </div>
   )
 }

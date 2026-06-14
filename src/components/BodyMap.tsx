@@ -1,22 +1,43 @@
 import type { MuscleId } from '../data/plan'
 
+type View = 'both' | 'front' | 'back'
+
 type Props = {
   /** muscle id -> activation intensity 0..1 */
   values: Partial<Record<MuscleId, number>>
-  /** width of each (front/back) figure in px */
+  /** width of each figure in px */
   size?: number
+  view?: View
+  showLabels?: boolean
 }
 
 const BASE = '#2b241d'
-const STROKE = '#4a4036'
+const STROKE = '#362e26'
 
-export default function BodyMap({ values, size = 112 }: Props) {
+const BACK_MUSCLES: MuscleId[] = [
+  'traps',
+  'rear-delts',
+  'triceps',
+  'lats',
+  'mid-back',
+  'lower-back',
+  'glutes',
+  'hamstrings',
+  'calves',
+]
+
+/** Pick the most relevant single view for a thumbnail. */
+export function bestView(primary: MuscleId[]): View {
+  const back = primary.filter((m) => BACK_MUSCLES.includes(m)).length
+  return back > primary.length - back ? 'back' : 'front'
+}
+
+export default function BodyMap({ values, size = 112, view = 'both', showLabels = true }: Props) {
   const op = (id: MuscleId) => {
     const v = values[id] ?? 0
     if (v <= 0) return 0
     return Math.min(1, 0.32 + 0.63 * v)
   }
-  // spread onto a muscle shape
   const m = (id: MuscleId) => ({ fill: 'var(--accent)', fillOpacity: op(id) })
 
   const Base = () => (
@@ -38,65 +59,71 @@ export default function BodyMap({ values, size = 112 }: Props) {
     </g>
   )
 
+  const Front = () => (
+    <figure className="m-0 flex flex-col items-center gap-1">
+      <svg width={size} viewBox="0 0 120 214" role="img" aria-label="Front view muscles">
+        <Base />
+        <g stroke="none">
+          <circle cx="33" cy="42" r="7.5" {...m('front-delts')} />
+          <circle cx="87" cy="42" r="7.5" {...m('front-delts')} />
+          <circle cx="25" cy="48" r="4.5" {...m('side-delts')} />
+          <circle cx="95" cy="48" r="4.5" {...m('side-delts')} />
+          <ellipse cx="52" cy="46" rx="9" ry="5.5" transform="rotate(-12 52 46)" {...m('upper-chest')} />
+          <ellipse cx="68" cy="46" rx="9" ry="5.5" transform="rotate(12 68 46)" {...m('upper-chest')} />
+          <ellipse cx="51" cy="57" rx="9" ry="6" {...m('chest')} />
+          <ellipse cx="69" cy="57" rx="9" ry="6" {...m('chest')} />
+          <ellipse cx="28" cy="56" rx="5" ry="11" {...m('biceps')} />
+          <ellipse cx="92" cy="56" rx="5" ry="11" {...m('biceps')} />
+          <ellipse cx="25" cy="88" rx="4.5" ry="13" {...m('forearms')} />
+          <ellipse cx="95" cy="88" rx="4.5" ry="13" {...m('forearms')} />
+          <rect x="53" y="60" width="14" height="30" rx="4" {...m('abs')} />
+          <ellipse cx="48" cy="76" rx="3.5" ry="11" transform="rotate(12 48 76)" {...m('obliques')} />
+          <ellipse cx="72" cy="76" rx="3.5" ry="11" transform="rotate(-12 72 76)" {...m('obliques')} />
+          <ellipse cx="52" cy="150" rx="7" ry="22" {...m('quads')} />
+          <ellipse cx="68" cy="150" rx="7" ry="22" {...m('quads')} />
+          <ellipse cx="57" cy="146" rx="3" ry="15" {...m('adductors')} />
+          <ellipse cx="63" cy="146" rx="3" ry="15" {...m('adductors')} />
+        </g>
+        <g stroke={STROKE} strokeWidth={0.6} fill="none" opacity={0.8}>
+          <line x1="60" y1="62" x2="60" y2="90" />
+          <line x1="53" y1="70" x2="67" y2="70" />
+          <line x1="53" y1="79" x2="67" y2="79" />
+        </g>
+      </svg>
+      {showLabels && <figcaption className="eyebrow">Front</figcaption>}
+    </figure>
+  )
+
+  const Back = () => (
+    <figure className="m-0 flex flex-col items-center gap-1">
+      <svg width={size} viewBox="0 0 120 214" role="img" aria-label="Back view muscles">
+        <Base />
+        <g stroke="none">
+          <polygon points="50,34 70,34 60,50" {...m('traps')} />
+          <circle cx="33" cy="42" r="7.5" {...m('rear-delts')} />
+          <circle cx="87" cy="42" r="7.5" {...m('rear-delts')} />
+          <ellipse cx="28" cy="56" rx="5" ry="11" {...m('triceps')} />
+          <ellipse cx="92" cy="56" rx="5" ry="11" {...m('triceps')} />
+          <rect x="53" y="46" width="14" height="12" rx="3" {...m('mid-back')} />
+          <path d="M45 50 q-9 14 -3 30 q6 6 11 2 l1 -30 q-4 -6 -9 -2 z" {...m('lats')} />
+          <path d="M75 50 q9 14 3 30 q-6 6 -11 2 l-1 -30 q4 -6 9 -2 z" {...m('lats')} />
+          <rect x="52" y="82" width="16" height="14" rx="4" {...m('lower-back')} />
+          <ellipse cx="53" cy="114" rx="8" ry="7" {...m('glutes')} />
+          <ellipse cx="67" cy="114" rx="8" ry="7" {...m('glutes')} />
+          <ellipse cx="52" cy="150" rx="7" ry="20" {...m('hamstrings')} />
+          <ellipse cx="68" cy="150" rx="7" ry="20" {...m('hamstrings')} />
+          <ellipse cx="52" cy="190" rx="6" ry="15" {...m('calves')} />
+          <ellipse cx="68" cy="190" rx="6" ry="15" {...m('calves')} />
+        </g>
+      </svg>
+      {showLabels && <figcaption className="eyebrow">Back</figcaption>}
+    </figure>
+  )
+
   return (
     <div className="flex items-end justify-center gap-3">
-      <figure className="m-0 flex flex-col items-center gap-1">
-        <svg width={size} viewBox="0 0 120 214" role="img" aria-label="Front view muscles">
-          <Base />
-          <g stroke="none">
-            <circle cx="33" cy="42" r="7.5" {...m('front-delts')} />
-            <circle cx="87" cy="42" r="7.5" {...m('front-delts')} />
-            <circle cx="25" cy="48" r="4.5" {...m('side-delts')} />
-            <circle cx="95" cy="48" r="4.5" {...m('side-delts')} />
-            <ellipse cx="52" cy="46" rx="9" ry="5.5" transform="rotate(-12 52 46)" {...m('upper-chest')} />
-            <ellipse cx="68" cy="46" rx="9" ry="5.5" transform="rotate(12 68 46)" {...m('upper-chest')} />
-            <ellipse cx="51" cy="57" rx="9" ry="6" {...m('chest')} />
-            <ellipse cx="69" cy="57" rx="9" ry="6" {...m('chest')} />
-            <ellipse cx="28" cy="56" rx="5" ry="11" {...m('biceps')} />
-            <ellipse cx="92" cy="56" rx="5" ry="11" {...m('biceps')} />
-            <ellipse cx="25" cy="88" rx="4.5" ry="13" {...m('forearms')} />
-            <ellipse cx="95" cy="88" rx="4.5" ry="13" {...m('forearms')} />
-            <rect x="53" y="60" width="14" height="30" rx="4" {...m('abs')} />
-            <ellipse cx="48" cy="76" rx="3.5" ry="11" transform="rotate(12 48 76)" {...m('obliques')} />
-            <ellipse cx="72" cy="76" rx="3.5" ry="11" transform="rotate(-12 72 76)" {...m('obliques')} />
-            <ellipse cx="52" cy="150" rx="7" ry="22" {...m('quads')} />
-            <ellipse cx="68" cy="150" rx="7" ry="22" {...m('quads')} />
-            <ellipse cx="57" cy="146" rx="3" ry="15" {...m('adductors')} />
-            <ellipse cx="63" cy="146" rx="3" ry="15" {...m('adductors')} />
-          </g>
-          {/* ab / midline definition */}
-          <g stroke={STROKE} strokeWidth={0.6} fill="none" opacity={0.8}>
-            <line x1="60" y1="62" x2="60" y2="90" />
-            <line x1="53" y1="70" x2="67" y2="70" />
-            <line x1="53" y1="79" x2="67" y2="79" />
-          </g>
-        </svg>
-        <figcaption className="text-[10px] uppercase tracking-widest text-muted">Front</figcaption>
-      </figure>
-
-      <figure className="m-0 flex flex-col items-center gap-1">
-        <svg width={size} viewBox="0 0 120 214" role="img" aria-label="Back view muscles">
-          <Base />
-          <g stroke="none">
-            <polygon points="50,34 70,34 60,50" {...m('traps')} />
-            <circle cx="33" cy="42" r="7.5" {...m('rear-delts')} />
-            <circle cx="87" cy="42" r="7.5" {...m('rear-delts')} />
-            <ellipse cx="28" cy="56" rx="5" ry="11" {...m('triceps')} />
-            <ellipse cx="92" cy="56" rx="5" ry="11" {...m('triceps')} />
-            <rect x="53" y="46" width="14" height="12" rx="3" {...m('mid-back')} />
-            <path d="M45 50 q-9 14 -3 30 q6 6 11 2 l1 -30 q-4 -6 -9 -2 z" {...m('lats')} />
-            <path d="M75 50 q9 14 3 30 q-6 6 -11 2 l-1 -30 q4 -6 9 -2 z" {...m('lats')} />
-            <rect x="52" y="82" width="16" height="14" rx="4" {...m('lower-back')} />
-            <ellipse cx="53" cy="114" rx="8" ry="7" {...m('glutes')} />
-            <ellipse cx="67" cy="114" rx="8" ry="7" {...m('glutes')} />
-            <ellipse cx="52" cy="150" rx="7" ry="20" {...m('hamstrings')} />
-            <ellipse cx="68" cy="150" rx="7" ry="20" {...m('hamstrings')} />
-            <ellipse cx="52" cy="190" rx="6" ry="15" {...m('calves')} />
-            <ellipse cx="68" cy="190" rx="6" ry="15" {...m('calves')} />
-          </g>
-        </svg>
-        <figcaption className="text-[10px] uppercase tracking-widest text-muted">Back</figcaption>
-      </figure>
+      {view !== 'back' && <Front />}
+      {view !== 'front' && <Back />}
     </div>
   )
 }

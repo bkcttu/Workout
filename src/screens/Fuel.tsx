@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Pencil, Plus, X } from 'lucide-react'
 import RingProgress from '../components/RingProgress'
 import { CALORIE_NOTE } from '../data/plan'
 import { useStore } from '../lib/StoreContext'
@@ -66,48 +67,40 @@ export default function Fuel() {
   const entries = [...n.today.entries].reverse()
 
   return (
-    <div className="safe-top px-4">
-      <header className="flex items-center justify-between pt-2">
-        <h1 className="display text-3xl text-text">Fuel</h1>
+    <div className="safe-top px-5">
+      <header className="flex items-center justify-between pt-3">
+        <h1 className="display text-[34px] leading-none text-text">Fuel</h1>
         <button
           onClick={() => setEditGoal((e) => !e)}
-          className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-muted active:bg-surface"
+          className="press inline-flex items-center gap-1.5 rounded-ctl border border-hairline px-3 py-2 text-xs font-semibold text-ink2"
         >
-          {editGoal ? 'Done' : 'Edit goal'}
+          <Pencil size={13} /> {editGoal ? 'Done' : 'Goal'}
         </button>
       </header>
 
       {editGoal && (
-        <div className="mt-3 rounded-2xl border border-border bg-surface p-4">
-          <label className="text-xs font-semibold uppercase tracking-widest text-muted">
-            Daily protein goal (g)
-          </label>
+        <div className="card mt-4 p-5">
+          <label className="eyebrow">Daily protein goal (g)</label>
           <input
             inputMode="numeric"
             type="number"
             value={goal}
             onChange={(e) => setGoal(Math.max(0, Number(e.target.value) || 0))}
-            className="tnum mt-2 h-12 w-full rounded-lg border border-border bg-bg px-3 text-lg text-text"
+            className="tnum mt-2 w-full rounded-none border-0 border-b-2 border-hairline bg-transparent py-1.5 text-2xl text-text focus:border-accent focus:outline-none"
           />
         </div>
       )}
 
-      {/* Ring */}
-      <div className="mt-4 grid place-items-center">
-        <RingProgress
-          progress={goal ? eaten / goal : 0}
-          size={240}
-          stroke={16}
-          color={met ? 'var(--brass)' : 'var(--accent)'}
-        >
+      <div className="mt-6 grid place-items-center">
+        <RingProgress progress={goal ? eaten / goal : 0} size={232} stroke={15} color={met ? 'var(--brass)' : undefined}>
           <div>
-            <div className="tnum text-5xl font-bold text-text">{eaten}</div>
-            <div className="tnum text-sm text-muted">/ {goal} g</div>
+            <div className="tnum text-[52px] leading-none text-text">{eaten}</div>
+            <div className="tnum mt-1 text-sm text-dim">/ {goal} g</div>
           </div>
         </RingProgress>
       </div>
 
-      <p className="mt-2 text-center text-sm text-muted">
+      <p className="mt-3 text-center text-sm text-ink2">
         {eaten === 0
           ? '0 of 200 g. First hit: a shake is 42 right there.'
           : met
@@ -115,14 +108,13 @@ export default function Fuel() {
             : `${remaining} g to go.`}
       </p>
 
-      {/* Quick-add staples */}
-      <h2 className="mt-5 text-xs font-semibold uppercase tracking-widest text-muted">Quick add</h2>
+      <h2 className="eyebrow mt-7">Quick add</h2>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {n.staples.map((s) => (
           <button
             key={s.name}
             onClick={() => addEntry({ name: s.name, protein: s.protein, calories: s.calories })}
-            className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface p-3 text-left active:bg-surface-raised"
+            className="press flex items-center justify-between gap-2 rounded-card bg-surface-raised p-3 text-left"
           >
             <span className="min-w-0 flex-1 truncate text-sm text-text">{s.name}</span>
             <span className="tnum shrink-0 text-sm font-bold text-accent">+{s.protein}</span>
@@ -130,21 +122,20 @@ export default function Fuel() {
         ))}
       </div>
 
-      {/* Custom add */}
       {!showCustom ? (
         <button
           onClick={() => setShowCustom(true)}
-          className="mt-2 h-12 w-full rounded-xl border border-dashed border-border text-sm font-semibold text-muted active:bg-surface"
+          className="press mt-2 flex w-full items-center justify-center gap-1.5 rounded-ctl border border-dashed border-hairline py-3 text-sm font-semibold text-dim"
         >
-          + Custom entry
+          <Plus size={15} /> Custom entry
         </button>
       ) : (
-        <div className="mt-2 rounded-2xl border border-border bg-surface p-3">
+        <div className="card mt-2 p-4">
           <input
             value={cName}
             onChange={(e) => setCName(e.target.value)}
             placeholder="Food name"
-            className="h-12 w-full rounded-lg border border-border bg-bg px-3 text-text"
+            className="w-full rounded-ctl bg-surface-raised px-3 py-3 text-text placeholder:text-dim focus:outline-none"
           />
           <div className="mt-2 flex gap-2">
             <input
@@ -153,7 +144,7 @@ export default function Fuel() {
               value={cProtein}
               onChange={(e) => setCProtein(e.target.value)}
               placeholder="protein g"
-              className="tnum h-12 flex-1 rounded-lg border border-border bg-bg px-3 text-text"
+              className="tnum w-full rounded-ctl bg-surface-raised px-3 py-3 text-text placeholder:text-dim focus:outline-none"
             />
             {showCals && (
               <input
@@ -162,28 +153,26 @@ export default function Fuel() {
                 value={cCalories}
                 onChange={(e) => setCCalories(e.target.value)}
                 placeholder="kcal (opt)"
-                className="tnum h-12 flex-1 rounded-lg border border-border bg-bg px-3 text-text"
+                className="tnum w-full rounded-ctl bg-surface-raised px-3 py-3 text-text placeholder:text-dim focus:outline-none"
               />
             )}
           </div>
           {!showCals && (
-            <button
-              onClick={() => setShowCals(true)}
-              className="mt-2 text-xs text-muted underline"
-            >
+            <button onClick={() => setShowCals(true)} className="mt-2 text-xs text-dim underline">
               + add calories (optional)
             </button>
           )}
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             <button
               onClick={submitCustom}
-              className="h-12 flex-1 rounded-xl bg-accent text-sm font-bold uppercase tracking-wide text-bg active:bg-accent-bright"
+              className="press rounded-ctl py-3 text-sm font-bold uppercase tracking-wide text-bg"
+              style={{ backgroundImage: 'linear-gradient(180deg, var(--accent-hot), var(--accent))' }}
             >
               Add
             </button>
             <button
               onClick={() => setShowCustom(false)}
-              className="h-12 flex-1 rounded-xl border border-border bg-surface-raised text-sm font-semibold text-muted active:bg-bg"
+              className="press rounded-ctl border border-hairline py-3 text-sm font-semibold text-dim"
             >
               Cancel
             </button>
@@ -191,29 +180,26 @@ export default function Fuel() {
         </div>
       )}
 
-      {/* Today's entries */}
       {entries.length > 0 && (
         <>
-          <h2 className="mt-5 text-xs font-semibold uppercase tracking-widest text-muted">
+          <h2 className="eyebrow mt-7">
             Today · {eaten} g eaten · {remaining} g left
           </h2>
-          <div className="mt-2 space-y-1.5">
-            {entries.map((e) => (
+          <div className="card mt-2 overflow-hidden">
+            {entries.map((e, i) => (
               <div
                 key={e.ts}
-                className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
+                className={`flex items-center gap-3 px-4 py-3 ${i > 0 ? 'border-t border-hairline' : ''}`}
               >
                 <span className="min-w-0 flex-1 truncate text-sm text-text">{e.name}</span>
                 <span className="tnum text-sm font-bold text-text">{e.protein} g</span>
-                {e.calories != null && (
-                  <span className="tnum text-xs text-muted">{e.calories} kcal</span>
-                )}
+                {e.calories != null && <span className="tnum text-xs text-dim">{e.calories} kcal</span>}
                 <button
                   onClick={() => removeEntry(e.ts)}
                   aria-label={`Delete ${e.name}`}
-                  className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border text-muted active:bg-surface-raised"
+                  className="press grid h-8 w-8 shrink-0 place-items-center rounded-ctl text-dim"
                 >
-                  ✕
+                  <X size={16} />
                 </button>
               </div>
             ))}
@@ -221,37 +207,30 @@ export default function Fuel() {
         </>
       )}
 
-      {/* Calorie note */}
-      <div className="mt-5 rounded-2xl border border-border bg-surface p-4">
-        <p className="text-sm italic text-muted">{CALORIE_NOTE}</p>
+      <div className="card mt-5 p-5">
+        <p className="text-sm italic text-ink2">{CALORIE_NOTE}</p>
       </div>
 
-      {/* History strip */}
-      <h2 className="mt-6 text-xs font-semibold uppercase tracking-widest text-muted">
-        Last 14 days
-      </h2>
-      <div className="mt-2 flex h-24 items-end gap-1 rounded-2xl border border-border bg-surface p-3">
+      <h2 className="eyebrow mt-7">Last 14 days</h2>
+      <div className="card mt-2 flex h-24 items-end gap-1 p-3">
         {[{ date: today, proteinG: eaten }, ...n.history]
           .slice(0, 14)
           .reverse()
-          .map((d, i) => {
-            const hit = d.proteinG >= goal
-            return (
-              <div key={i} className="flex flex-1 flex-col items-center justify-end gap-1">
-                <div
-                  className="w-full rounded-sm"
-                  style={{
-                    height: `${Math.max(4, (d.proteinG / maxHist) * 100)}%`,
-                    background: hit ? 'var(--brass)' : 'var(--accent)',
-                  }}
-                  title={`${d.date}: ${d.proteinG} g`}
-                />
-              </div>
-            )
-          })}
+          .map((d, i) => (
+            <div key={i} className="flex flex-1 flex-col items-center justify-end">
+              <div
+                className="w-full rounded-sm"
+                style={{
+                  height: `${Math.max(4, (d.proteinG / maxHist) * 100)}%`,
+                  background: d.proteinG >= goal ? 'var(--brass)' : 'var(--accent)',
+                }}
+                title={`${d.date}: ${d.proteinG} g`}
+              />
+            </div>
+          ))}
       </div>
 
-      <p className="mt-4 text-center text-[11px] text-muted">
+      <p className="mt-6 text-center text-[11px] text-dim">
         Rough protein values are estimates you can edit. Habit tracker, not a clinical plan.
       </p>
     </div>

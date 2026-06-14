@@ -3,16 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --bg: #161310; /* warm graphite, not pure black */
-  --surface: #211c17;
-  --surface-raised: #2b241d;
-  --border: #3a322a; /* hairline */
+  --bg: #161310; /* warm graphite base, not pure black */
+  --bg-glow: #1e1813; /* faint radial glow top-center */
+  --bg-glow-edge: #110e0c;
+  --surface: #1f1a15; /* cards */
+  --surface-raised: #29221b; /* inputs, nested */
+  --hairline: #362e26; /* low-contrast dividers */
   --text: #f5efe6;
-  --text-muted: #9a8f82;
-  --accent: #f2511b; /* molten orange — primary actions/active */
-  --accent-bright: #ff6a1a;
-  --brass: #c8a24a; /* completed / done states */
-  --care: #c2553d; /* L5/S1 safety cues */
+  --text-2: #a89b8c; /* secondary */
+  --text-dim: #6e6358; /* labels, hints */
+  --accent: #f2511b; /* molten orange */
+  --accent-hot: #ff6a2c; /* gradient top / press */
+  --brass: #c8a24a; /* completed / done */
+  --care: #c2553d; /* safety cues */
 
   color-scheme: dark;
 }
@@ -25,30 +28,68 @@ body,
 
 body {
   margin: 0;
-  background: var(--bg);
   color: var(--text);
-  font-family:
-    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
+  /* fixed radial glow over a warm graphite base — never flat black */
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--bg-glow) 0%, var(--bg) 45%, var(--bg-glow-edge) 100%)
+      fixed,
+    var(--bg);
 }
 
-/* Instrument-panel numerals everywhere we opt in */
+/* instrument-panel numerals */
 .tnum {
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1;
+  font-weight: 600;
 }
 
-/* Heavy uppercase display headings */
+/* heavy uppercase display headings */
 .display {
+  font-family: 'Archivo', system-ui, sans-serif;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.01em;
 }
 
-/* Strip number-input spinners; keep big sweaty-hand targets */
+/* tiny tracked eyebrow label */
+.eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+/* machined-metal card: a subtle lift, not an outlined box */
+.card {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.hairline {
+  border-color: var(--hairline);
+}
+
+/* press feedback */
+.press {
+  transition:
+    transform 0.15s ease-out,
+    background-color 0.15s ease-out;
+}
+.press:active {
+  transform: scale(0.98);
+}
+
+/* strip number spinners */
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -58,9 +99,8 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-/* Visible focus for accessibility */
 *:focus-visible {
-  outline: 2px solid var(--accent-bright);
+  outline: 2px solid var(--accent-hot);
   outline-offset: 2px;
 }
 
@@ -71,10 +111,9 @@ input[type='number'] {
   }
 }
 
-/* Safe-area padding for iPhone notch / home indicator */
 .safe-top {
   padding-top: max(0.75rem, env(safe-area-inset-top));
 }
 .safe-bottom {
-  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
