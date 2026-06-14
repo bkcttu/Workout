@@ -3,10 +3,15 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
+const BUILD_ID = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+
 export default defineConfig({
   // Relative base so the app works under a GitHub Pages subpath
   // (https://<user>.github.io/workout/) as well as at a host root.
   base: './',
+  define: {
+    __BUILD_ID__: JSON.stringify(BUILD_ID),
+  },
   plugins: [
     react(),
     VitePWA({

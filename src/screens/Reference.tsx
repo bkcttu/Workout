@@ -216,6 +216,7 @@ export default function Reference() {
       </section>
 
       <p className="mt-4 text-center text-[11px] text-muted">{MEDICAL_DISCLAIMER}</p>
+      <p className="tnum mt-2 text-center text-[10px] text-muted">FORGE · build {__BUILD_ID__}</p>
     </div>
   )
 }
