@@ -448,6 +448,7 @@ export const EQUIPMENT_INVENTORY: string[] = [
   'Cable machine / functional trainer (dual adjustable pulleys)',
   'Cable attachments: 2× D-handles, rope, wide lat bar',
   'Pull-up bar',
+  'Dip station',
   'Chest-supported row machine (or incline bench + DBs)',
   'Lat pulldown station',
   'Medicine ball',
