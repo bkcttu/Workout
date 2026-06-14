@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { DAYS, type Exercise, type FormPoint } from '../data/plan'
+import {
+  DAYS,
+  MUSCLE_LABELS,
+  type Exercise,
+  type FormPoint,
+  type MuscleId,
+} from '../data/plan'
+import BodyMap from '../components/BodyMap'
 import { useStore } from '../lib/StoreContext'
 import { useTimer } from '../lib/TimerContext'
 import { useWakeLock } from '../lib/useWakeLock'
@@ -153,6 +160,59 @@ function SetGrid({
   )
 }
 
+function MusclesToggle({ ex }: { ex: Exercise }) {
+  const [show, setShow] = useState(false)
+  if (!ex.muscles) return null
+  const primary = ex.muscles.primary
+  const secondary = ex.muscles.secondary ?? []
+  const values: Partial<Record<MuscleId, number>> = {}
+  secondary.forEach((mu) => (values[mu] = 0.5))
+  primary.forEach((mu) => (values[mu] = 1)) // primary wins over secondary
+
+  return (
+    <>
+      <button
+        onClick={() => setShow((s) => !s)}
+        className="mb-3 ml-2 inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text active:bg-surface-raised"
+      >
+        Muscles {show ? '▾' : '▸'}
+      </button>
+      {show && (
+        <div className="mb-4 rounded-xl border border-border bg-bg p-3">
+          {ex.demoGif ? (
+            <img
+              src={ex.demoGif}
+              alt={`${ex.name} demo`}
+              className="mx-auto mb-3 max-h-48 rounded-lg"
+              loading="lazy"
+            />
+          ) : null}
+          <BodyMap values={values} />
+          <div className="mt-3 space-y-1 text-xs">
+            <p>
+              <span className="mr-1 inline-block h-2.5 w-2.5 rounded-sm align-middle" style={{ background: 'var(--accent)' }} />
+              <span className="text-muted">Primary: </span>
+              <span className="text-text">{primary.map((mu) => MUSCLE_LABELS[mu]).join(', ')}</span>
+            </p>
+            {secondary.length > 0 && (
+              <p>
+                <span
+                  className="mr-1 inline-block h-2.5 w-2.5 rounded-sm align-middle"
+                  style={{ background: 'var(--accent)', opacity: 0.5 }}
+                />
+                <span className="text-muted">Secondary: </span>
+                <span className="text-text">
+                  {secondary.map((mu) => MUSCLE_LABELS[mu]).join(', ')}
+                </span>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
 // The inner logging content for a single exercise (no outer card/header).
 function ExerciseContent({ ex }: { ex: Exercise }) {
   const log = useExerciseLog(ex)
@@ -166,6 +226,7 @@ function ExerciseContent({ ex }: { ex: Exercise }) {
       )}
       {ex.why && <p className="mb-3 text-sm italic text-muted">{ex.why}</p>}
       <FormToggle form={ex.form} />
+      <MusclesToggle ex={ex} />
       <SetGrid ex={ex} {...log} />
     </div>
   )

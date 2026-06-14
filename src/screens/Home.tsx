@@ -1,8 +1,30 @@
 import { Link } from 'react-router-dom'
-import { APP_NAME, DAYS } from '../data/plan'
+import { APP_NAME, DAYS, MUSCLE_LABELS, type MuscleId } from '../data/plan'
 import { useStore } from '../lib/StoreContext'
 import { hydrationGoal, prettyDate, proteinTotal, todayISO } from '../lib/store'
 import RingProgress from '../components/RingProgress'
+import BodyMap from '../components/BodyMap'
+
+// Weekly muscle emphasis across the whole tracked program (primary=2, secondary=1).
+const WEEK_COUNTS: Partial<Record<MuscleId, number>> = (() => {
+  const counts: Partial<Record<MuscleId, number>> = {}
+  DAYS.forEach((d) =>
+    d.exercises?.forEach((ex) => {
+      if (!ex.muscles) return
+      ex.muscles.primary.forEach((mu) => (counts[mu] = (counts[mu] ?? 0) + 2))
+      ex.muscles.secondary?.forEach((mu) => (counts[mu] = (counts[mu] ?? 0) + 1))
+    }),
+  )
+  return counts
+})()
+
+const WEEK_MAX = Math.max(1, ...Object.values(WEEK_COUNTS))
+const WEEK_VALUES: Partial<Record<MuscleId, number>> = Object.fromEntries(
+  Object.entries(WEEK_COUNTS).map(([k, v]) => [k, v / WEEK_MAX]),
+)
+const WEEK_TOP = (Object.entries(WEEK_COUNTS) as [MuscleId, number][])
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 4)
 
 function daysAgoLabel(iso?: string): string | null {
   if (!iso) return null
@@ -130,6 +152,27 @@ export default function Home() {
             </Link>
           )
         })}
+      </div>
+
+      {/* Weekly muscle focus */}
+      <h2 className="mt-6 text-xs font-semibold uppercase tracking-widest text-muted">
+        This week’s muscle focus
+      </h2>
+      <div className="mt-2 rounded-2xl border border-border bg-surface p-4">
+        <BodyMap values={WEEK_VALUES} />
+        <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+          {WEEK_TOP.map(([mu]) => (
+            <span
+              key={mu}
+              className="rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-semibold text-accent"
+            >
+              {MUSCLE_LABELS[mu]}
+            </span>
+          ))}
+        </div>
+        <p className="mt-2 text-center text-[11px] text-muted">
+          Brighter = more weekly volume. Upper chest leads, by design.
+        </p>
       </div>
 
       <Link
