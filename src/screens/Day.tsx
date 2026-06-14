@@ -227,6 +227,16 @@ function ExerciseContent({ ex }: { ex: Exercise }) {
       {ex.why && <p className="mb-3 text-sm italic text-muted">{ex.why}</p>}
       <FormToggle form={ex.form} />
       <MusclesToggle ex={ex} />
+      <a
+        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+          ex.name.replace(/\(.*?\)/g, '').trim() + ' exercise technique',
+        )}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mb-3 ml-2 inline-flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-text active:bg-surface-raised"
+      >
+        ▶ Demo
+      </a>
       <SetGrid ex={ex} {...log} />
     </div>
   )

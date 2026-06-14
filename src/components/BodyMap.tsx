@@ -10,80 +10,89 @@ type Props = {
 const BASE = '#2b241d'
 const STROKE = '#4a4036'
 
-export default function BodyMap({ values, size = 110 }: Props) {
+export default function BodyMap({ values, size = 112 }: Props) {
   const op = (id: MuscleId) => {
     const v = values[id] ?? 0
     if (v <= 0) return 0
-    return Math.min(1, 0.3 + 0.65 * v)
+    return Math.min(1, 0.32 + 0.63 * v)
   }
-  const m = (id: MuscleId) => ({ fill: 'var(--accent)', fillOpacity: op(id), stroke: 'none' })
+  // spread onto a muscle shape
+  const m = (id: MuscleId) => ({ fill: 'var(--accent)', fillOpacity: op(id) })
 
-  const Silhouette = () => (
-    <g fill={BASE} stroke={STROKE} strokeWidth={0.8}>
-      <circle cx="60" cy="16" r="11" />
-      <rect x="52" y="25" width="16" height="8" />
-      <path d="M38 33 h44 a8 8 0 0 1 8 8 v34 a10 10 0 0 1 -6 9 l-2 16 h-40 l-2 -16 a10 10 0 0 1 -6 -9 v-34 a8 8 0 0 1 8 -8 z" />
-      <rect x="22" y="36" width="11" height="42" rx="5" />
-      <rect x="20" y="76" width="10" height="40" rx="5" />
-      <rect x="87" y="36" width="11" height="42" rx="5" />
-      <rect x="90" y="76" width="10" height="40" rx="5" />
-      <rect x="42" y="98" width="36" height="16" rx="6" />
-      <rect x="44" y="112" width="15" height="52" rx="7" />
-      <rect x="45" y="160" width="13" height="42" rx="6" />
-      <rect x="61" y="112" width="15" height="52" rx="7" />
-      <rect x="62" y="160" width="13" height="42" rx="6" />
+  const Base = () => (
+    <g fill={BASE} stroke={STROKE} strokeWidth={0.8} strokeLinejoin="round">
+      <circle cx="60" cy="15" r="9" />
+      <path d="M55 23 q5 3 10 0 l2 8 q-7 4 -14 0 z" />
+      <path d="M42 35 q18 -4 36 0 l8 12 q3 14 -4 28 q-4 12 -8 20 l-1 18 h-26 l-1 -18 q-4 -8 -8 -20 q-7 -14 -4 -28 z" />
+      <circle cx="33" cy="42" r="9" />
+      <circle cx="87" cy="42" r="9" />
+      <ellipse cx="28" cy="58" rx="6" ry="15" />
+      <ellipse cx="92" cy="58" rx="6" ry="15" />
+      <ellipse cx="25" cy="90" rx="5" ry="15" />
+      <ellipse cx="95" cy="90" rx="5" ry="15" />
+      <path d="M47 112 h26 l-2 16 q-11 4 -22 0 z" />
+      <ellipse cx="52" cy="150" rx="9" ry="27" />
+      <ellipse cx="68" cy="150" rx="9" ry="27" />
+      <ellipse cx="52" cy="192" rx="6" ry="18" />
+      <ellipse cx="68" cy="192" rx="6" ry="18" />
     </g>
   )
 
   return (
     <div className="flex items-end justify-center gap-3">
       <figure className="m-0 flex flex-col items-center gap-1">
-        <svg width={size} viewBox="0 0 120 210" role="img" aria-label="Front view muscles">
-          <Silhouette />
-          <g>
-            <ellipse cx="35" cy="40" rx="8" ry="7" {...m('front-delts')} />
-            <ellipse cx="85" cy="40" rx="8" ry="7" {...m('front-delts')} />
-            <ellipse cx="28" cy="45" rx="5" ry="6" {...m('side-delts')} />
-            <ellipse cx="92" cy="45" rx="5" ry="6" {...m('side-delts')} />
-            <rect x="42" y="39" width="16" height="8" rx="3" {...m('upper-chest')} />
-            <rect x="62" y="39" width="16" height="8" rx="3" {...m('upper-chest')} />
-            <rect x="42" y="48" width="16" height="12" rx="3" {...m('chest')} />
-            <rect x="62" y="48" width="16" height="12" rx="3" {...m('chest')} />
-            <ellipse cx="29" cy="62" rx="5" ry="11" {...m('biceps')} />
-            <ellipse cx="91" cy="62" rx="5" ry="11" {...m('biceps')} />
-            <ellipse cx="26" cy="96" rx="5" ry="14" {...m('forearms')} />
-            <ellipse cx="94" cy="96" rx="5" ry="14" {...m('forearms')} />
-            <rect x="52" y="61" width="16" height="34" rx="4" {...m('abs')} />
-            <ellipse cx="47" cy="76" rx="4" ry="12" {...m('obliques')} />
-            <ellipse cx="73" cy="76" rx="4" ry="12" {...m('obliques')} />
-            <ellipse cx="51" cy="138" rx="7" ry="22" {...m('quads')} />
-            <ellipse cx="69" cy="138" rx="7" ry="22" {...m('quads')} />
-            <ellipse cx="56" cy="134" rx="3" ry="16" {...m('adductors')} />
-            <ellipse cx="64" cy="134" rx="3" ry="16" {...m('adductors')} />
+        <svg width={size} viewBox="0 0 120 214" role="img" aria-label="Front view muscles">
+          <Base />
+          <g stroke="none">
+            <circle cx="33" cy="42" r="7.5" {...m('front-delts')} />
+            <circle cx="87" cy="42" r="7.5" {...m('front-delts')} />
+            <circle cx="25" cy="48" r="4.5" {...m('side-delts')} />
+            <circle cx="95" cy="48" r="4.5" {...m('side-delts')} />
+            <ellipse cx="52" cy="46" rx="9" ry="5.5" transform="rotate(-12 52 46)" {...m('upper-chest')} />
+            <ellipse cx="68" cy="46" rx="9" ry="5.5" transform="rotate(12 68 46)" {...m('upper-chest')} />
+            <ellipse cx="51" cy="57" rx="9" ry="6" {...m('chest')} />
+            <ellipse cx="69" cy="57" rx="9" ry="6" {...m('chest')} />
+            <ellipse cx="28" cy="56" rx="5" ry="11" {...m('biceps')} />
+            <ellipse cx="92" cy="56" rx="5" ry="11" {...m('biceps')} />
+            <ellipse cx="25" cy="88" rx="4.5" ry="13" {...m('forearms')} />
+            <ellipse cx="95" cy="88" rx="4.5" ry="13" {...m('forearms')} />
+            <rect x="53" y="60" width="14" height="30" rx="4" {...m('abs')} />
+            <ellipse cx="48" cy="76" rx="3.5" ry="11" transform="rotate(12 48 76)" {...m('obliques')} />
+            <ellipse cx="72" cy="76" rx="3.5" ry="11" transform="rotate(-12 72 76)" {...m('obliques')} />
+            <ellipse cx="52" cy="150" rx="7" ry="22" {...m('quads')} />
+            <ellipse cx="68" cy="150" rx="7" ry="22" {...m('quads')} />
+            <ellipse cx="57" cy="146" rx="3" ry="15" {...m('adductors')} />
+            <ellipse cx="63" cy="146" rx="3" ry="15" {...m('adductors')} />
+          </g>
+          {/* ab / midline definition */}
+          <g stroke={STROKE} strokeWidth={0.6} fill="none" opacity={0.8}>
+            <line x1="60" y1="62" x2="60" y2="90" />
+            <line x1="53" y1="70" x2="67" y2="70" />
+            <line x1="53" y1="79" x2="67" y2="79" />
           </g>
         </svg>
         <figcaption className="text-[10px] uppercase tracking-widest text-muted">Front</figcaption>
       </figure>
 
       <figure className="m-0 flex flex-col items-center gap-1">
-        <svg width={size} viewBox="0 0 120 210" role="img" aria-label="Back view muscles">
-          <Silhouette />
-          <g>
-            <polygon points="48,34 72,34 60,52" {...m('traps')} />
-            <ellipse cx="35" cy="40" rx="8" ry="7" {...m('rear-delts')} />
-            <ellipse cx="85" cy="40" rx="8" ry="7" {...m('rear-delts')} />
-            <ellipse cx="29" cy="62" rx="5" ry="11" {...m('triceps')} />
-            <ellipse cx="91" cy="62" rx="5" ry="11" {...m('triceps')} />
-            <rect x="52" y="46" width="16" height="14" rx="3" {...m('mid-back')} />
-            <ellipse cx="47" cy="68" rx="8" ry="14" {...m('lats')} />
-            <ellipse cx="73" cy="68" rx="8" ry="14" {...m('lats')} />
-            <rect x="51" y="82" width="18" height="15" rx="4" {...m('lower-back')} />
-            <ellipse cx="52" cy="107" rx="9" ry="8" {...m('glutes')} />
-            <ellipse cx="68" cy="107" rx="9" ry="8" {...m('glutes')} />
-            <ellipse cx="51" cy="140" rx="7" ry="20" {...m('hamstrings')} />
-            <ellipse cx="69" cy="140" rx="7" ry="20" {...m('hamstrings')} />
-            <ellipse cx="51" cy="180" rx="6" ry="15" {...m('calves')} />
-            <ellipse cx="69" cy="180" rx="6" ry="15" {...m('calves')} />
+        <svg width={size} viewBox="0 0 120 214" role="img" aria-label="Back view muscles">
+          <Base />
+          <g stroke="none">
+            <polygon points="50,34 70,34 60,50" {...m('traps')} />
+            <circle cx="33" cy="42" r="7.5" {...m('rear-delts')} />
+            <circle cx="87" cy="42" r="7.5" {...m('rear-delts')} />
+            <ellipse cx="28" cy="56" rx="5" ry="11" {...m('triceps')} />
+            <ellipse cx="92" cy="56" rx="5" ry="11" {...m('triceps')} />
+            <rect x="53" y="46" width="14" height="12" rx="3" {...m('mid-back')} />
+            <path d="M45 50 q-9 14 -3 30 q6 6 11 2 l1 -30 q-4 -6 -9 -2 z" {...m('lats')} />
+            <path d="M75 50 q9 14 3 30 q-6 6 -11 2 l-1 -30 q4 -6 9 -2 z" {...m('lats')} />
+            <rect x="52" y="82" width="16" height="14" rx="4" {...m('lower-back')} />
+            <ellipse cx="53" cy="114" rx="8" ry="7" {...m('glutes')} />
+            <ellipse cx="67" cy="114" rx="8" ry="7" {...m('glutes')} />
+            <ellipse cx="52" cy="150" rx="7" ry="20" {...m('hamstrings')} />
+            <ellipse cx="68" cy="150" rx="7" ry="20" {...m('hamstrings')} />
+            <ellipse cx="52" cy="190" rx="6" ry="15" {...m('calves')} />
+            <ellipse cx="68" cy="190" rx="6" ry="15" {...m('calves')} />
           </g>
         </svg>
         <figcaption className="text-[10px] uppercase tracking-widest text-muted">Back</figcaption>
