@@ -14,6 +14,7 @@ export type Exercise = {
   restSec: number
   why?: string
   superset?: boolean
+  equipment?: string // the specific gear/bar/attachment to grab for this lift
   form: FormPoint[] // 3 points each
 }
 export type Day = {
@@ -35,6 +36,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-incline-db-press',
         name: 'Incline Dumbbell Press (bench 30–45°)',
+        equipment: 'Adjustable bench (30–45°) · dumbbells',
         targetSets: 4,
         repRange: '6–8',
         restSec: 150,
@@ -50,6 +52,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-low-high-fly',
         name: 'Low-to-High Cable Fly',
+        equipment: 'Cable · 2 D-handles · low pulleys',
         targetSets: 4,
         repRange: '12–15',
         restSec: 90,
@@ -65,6 +68,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-incline-bb-press',
         name: 'Incline Barbell Press (or Reverse-Grip Bench)',
+        equipment: 'Barbell · rack w/ safeties · bench 30–45°',
         targetSets: 3,
         repRange: '8–10',
         restSec: 90,
@@ -78,6 +82,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-landmine-press',
         name: 'Standing Landmine Press',
+        equipment: 'Landmine · barbell',
         targetSets: 3,
         repRange: '8–10 / side',
         restSec: 90,
@@ -91,6 +96,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-rope-pushdown',
         name: 'Triceps Rope Pushdown',
+        equipment: 'Cable · rope · high pulley',
         targetSets: 3,
         repRange: '10–12',
         restSec: 60,
@@ -104,6 +110,7 @@ export const DAYS: Day[] = [
       {
         id: 'd1-pallof-press',
         name: 'Cable Pallof Press',
+        equipment: 'Cable · D-handle · chest height',
         targetSets: 3,
         repRange: '10 / side',
         restSec: 45,
@@ -125,6 +132,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-trap-rdl',
         name: 'Trap Bar Romanian Deadlift',
+        equipment: 'Trap (hex) bar',
         targetSets: 3,
         repRange: '6–8',
         restSec: 120,
@@ -141,6 +149,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-bulgarian',
         name: 'Dumbbell Bulgarian Split Squat',
+        equipment: 'Dumbbells · bench',
         targetSets: 3,
         repRange: '8–10 / leg',
         restSec: 90,
@@ -154,6 +163,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-hip-thrust',
         name: 'Hip Thrust',
+        equipment: 'Barbell · bench · hip pad',
         targetSets: 3,
         repRange: '8–12',
         restSec: 90,
@@ -167,6 +177,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-woodchopper',
         name: 'Cable Woodchopper',
+        equipment: 'Cable · D-handle',
         targetSets: 3,
         repRange: '10 / side',
         restSec: 60,
@@ -180,6 +191,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-med-ball-throw',
         name: 'Medicine-Ball Rotational Throw',
+        equipment: 'Medicine ball · wall',
         targetSets: 3,
         repRange: '5 / side',
         restSec: 60,
@@ -193,6 +205,7 @@ export const DAYS: Day[] = [
       {
         id: 'd2-suitcase-carry',
         name: 'Suitcase Carry',
+        equipment: 'One heavy dumbbell or kettlebell',
         targetSets: 3,
         repRange: '40 yd / side',
         restSec: 60,
@@ -214,6 +227,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-pullup',
         name: 'Pull-Up',
+        equipment: 'Pull-up bar',
         targetSets: 4,
         repRange: '6–10',
         restSec: 120,
@@ -226,6 +240,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-chest-row',
         name: 'Chest-Supported Row',
+        equipment: 'Chest-supported row machine (or incline bench + DBs)',
         targetSets: 3,
         repRange: '8–12',
         restSec: 90,
@@ -238,6 +253,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-incline-fly',
         name: 'Incline Cable Fly (lighter)',
+        equipment: 'Cable · 2 D-handles · low pulleys',
         targetSets: 3,
         repRange: '12–15',
         restSec: 60,
@@ -251,6 +267,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-lat-pulldown',
         name: 'Lat Pulldown',
+        equipment: 'Lat pulldown · wide bar',
         targetSets: 3,
         repRange: '10–12',
         restSec: 60,
@@ -264,6 +281,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-face-pull',
         name: 'Face Pull',
+        equipment: 'Cable · rope · upper pulley',
         targetSets: 3,
         repRange: '15–20',
         restSec: 45,
@@ -277,6 +295,7 @@ export const DAYS: Day[] = [
       {
         id: 'd3-ab-wheel',
         name: 'Ab Wheel Rollout',
+        equipment: 'Ab wheel',
         targetSets: 3,
         repRange: '8–12',
         restSec: 60,
@@ -310,6 +329,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-incline-bb-press',
         name: 'Incline Barbell Press',
+        equipment: 'Barbell · rack w/ safeties · bench 30–45°',
         targetSets: 4,
         repRange: '8–10',
         restSec: 120,
@@ -323,6 +343,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-flat-db-press',
         name: 'Flat Dumbbell Press',
+        equipment: 'Dumbbells · flat bench',
         targetSets: 3,
         repRange: '10–12',
         restSec: 90,
@@ -335,6 +356,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-cable-fly-mid',
         name: 'Cable Fly (mid height)',
+        equipment: 'Cable · 2 D-handles · chest-height pulleys',
         targetSets: 3,
         repRange: '12–15',
         restSec: 60,
@@ -348,6 +370,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-db-shoulder-press',
         name: 'Dumbbell Shoulder Press',
+        equipment: 'Dumbbells · upright bench',
         targetSets: 3,
         repRange: '8–12',
         restSec: 90,
@@ -360,6 +383,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-lateral-raise',
         name: 'Dumbbell Lateral Raise',
+        equipment: 'Dumbbells',
         targetSets: 3,
         repRange: '15–20',
         restSec: 60,
@@ -373,6 +397,7 @@ export const DAYS: Day[] = [
       {
         id: 'd5-biceps-curl',
         name: 'Dumbbell Biceps Curl',
+        equipment: 'Dumbbells',
         targetSets: 3,
         repRange: '10–12',
         restSec: 60,
@@ -392,7 +417,7 @@ export const DAYS: Day[] = [
 export const NUTRITION_TARGET = {
   headline: 'Lean-gain / recomp.',
   detail:
-    '~2,700–2,900 kcal/day, 200 g protein. Re-check scale + mirror every 2 weeks; chest should grow faster than the waist. Don’t diet down — adding upper-chest size is the lever, not cutting.',
+    'Maintenance is ~2,700 kcal; to build, eat ~2,900–3,000 kcal/day with 200 g protein. The number is a starting anchor — let the scale steer: aim to gain ~¼–½ lb/week. Flat for 2 weeks and chest not growing → push to 3,000+. Waist softening faster than the chest fills → ease back ~200. Don’t diet down — adding upper-chest size is the lever, not cutting.',
 }
 
 export const PROTEIN_TEMPLATE: string[] = [
@@ -412,6 +437,24 @@ export const SUPPLEMENTS: string[] = [
   'RHO Nutrition Berberine',
   'Bayer baby aspirin',
   'TRT injection (per my own schedule)',
+]
+
+// Full home-gym inventory the program draws on (shown on the Reference screen).
+export const EQUIPMENT_INVENTORY: string[] = [
+  'Adjustable bench (incline 30–45° + flat)',
+  'Barbell + power/squat rack with safety pins',
+  'Trap (hex) bar',
+  'Dumbbells (full range, light → heavy)',
+  'Cable machine / functional trainer (dual adjustable pulleys)',
+  'Cable attachments: 2× D-handles, rope, wide lat bar',
+  'Pull-up bar',
+  'Chest-supported row machine (or incline bench + DBs)',
+  'Lat pulldown station',
+  'Medicine ball',
+  'Kettlebell',
+  'Ab wheel',
+  'Sled',
+  'Infrared sauna + cold plunge',
 ]
 
 export const MEDICAL_DISCLAIMER =

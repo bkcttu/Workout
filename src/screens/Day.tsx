@@ -158,6 +158,12 @@ function ExerciseContent({ ex }: { ex: Exercise }) {
   const log = useExerciseLog(ex)
   return (
     <div>
+      {ex.equipment && (
+        <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-brass">
+          <span aria-hidden>🛠</span>
+          <span>{ex.equipment}</span>
+        </p>
+      )}
       {ex.why && <p className="mb-3 text-sm italic text-muted">{ex.why}</p>}
       <FormToggle form={ex.form} />
       <SetGrid ex={ex} {...log} />

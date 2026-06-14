@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import {
+  EQUIPMENT_INVENTORY,
   MEDICAL_DISCLAIMER,
   NUTRITION_TARGET,
   PROTEIN_TEMPLATE,
@@ -152,6 +153,24 @@ export default function Reference() {
           })}
         </div>
         <p className="mt-2 text-[11px] text-muted">Check-off only — no dosing advice.</p>
+      </section>
+
+      {/* Equipment inventory */}
+      <section className="mt-3 rounded-2xl border border-border bg-surface p-4">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-accent">
+          Gym equipment
+        </h2>
+        <ul className="mt-2 space-y-1.5">
+          {EQUIPMENT_INVENTORY.map((item) => (
+            <li key={item} className="flex gap-2 text-sm text-text">
+              <span className="shrink-0 text-brass">🛠</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-2 text-[11px] text-muted">
+          The full kit the program draws on. Each exercise lists the exact bar/attachment to grab.
+        </p>
       </section>
 
       {/* Backup */}
