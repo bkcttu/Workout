@@ -147,7 +147,13 @@ function SetGrid({
                 type="number"
                 value={set.weight ?? ''}
                 onChange={(e) => update(i, { weight: num(e.target.value) })}
-                placeholder={last?.weight != null ? String(last.weight) : '—'}
+                placeholder={
+                  last?.weight != null
+                    ? String(last.weight)
+                    : ex.suggested?.weight != null
+                      ? String(ex.suggested.weight)
+                      : '—'
+                }
                 className="tnum w-full rounded-none border-0 border-b-2 border-hairline bg-transparent py-1.5 text-center text-[20px] text-text placeholder:text-dim focus:border-accent focus:outline-none"
               />
               <input
@@ -192,6 +198,7 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
   const primary = ex.muscles?.primary ?? []
   const secondary = ex.muscles?.secondary ?? []
   const demo = demoFor(ex.id) ?? ex.demoGif
+  const noHistory = !log.prev
 
   return (
     <div className="pt-1">
@@ -199,6 +206,18 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
         <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-brass">
           <span aria-hidden>🛠</span>
           <span>{ex.equipment}</span>
+        </p>
+      )}
+      {ex.suggested && noHistory && (
+        <p className="mb-3 flex items-center gap-1.5 text-xs text-accent">
+          <span aria-hidden>💪</span>
+          <span>
+            Suggested start:{' '}
+            <span className="tnum font-semibold">
+              {ex.suggested.weight != null ? `${ex.suggested.weight} lb` : '—'}
+            </span>
+            {ex.suggested.note ? ` (${ex.suggested.note})` : ''} — calibrate set 1, then beat it.
+          </span>
         </p>
       )}
       {ex.why && <p className="mb-3 text-sm italic text-ink2">{ex.why}</p>}

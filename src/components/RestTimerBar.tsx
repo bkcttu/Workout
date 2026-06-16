@@ -1,4 +1,4 @@
-import { Pause, Play, Plus, RotateCcw, X } from 'lucide-react'
+import { Minus, Pause, Play, Plus, RotateCcw, X } from 'lucide-react'
 import RingProgress from './RingProgress'
 import { useTimer } from '../lib/TimerContext'
 
@@ -32,15 +32,26 @@ export default function RestTimerBar() {
           <div className="truncate text-sm text-text">{t.label || 'Rest timer'}</div>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <button
-            onClick={() => t.addTime(15)}
-            className="press tnum flex h-11 items-center gap-0.5 rounded-ctl px-2.5 text-sm text-text"
-            aria-label="Add 15 seconds"
-          >
-            <Plus size={14} />
-            15
-          </button>
+        <div className="flex items-center gap-1">
+          <div className="flex items-center overflow-hidden rounded-ctl border border-hairline">
+            <button
+              onClick={() => t.addTime(-15)}
+              className="press tnum flex h-11 items-center gap-0.5 px-2 text-sm text-text"
+              aria-label="Subtract 15 seconds"
+            >
+              <Minus size={13} />
+              15
+            </button>
+            <span className="h-6 w-px bg-hairline" />
+            <button
+              onClick={() => t.addTime(15)}
+              className="press tnum flex h-11 items-center gap-0.5 px-2 text-sm text-text"
+              aria-label="Add 15 seconds"
+            >
+              <Plus size={13} />
+              15
+            </button>
+          </div>
           <button
             onClick={() => t.reset()}
             className="press grid h-11 w-11 place-items-center rounded-ctl text-ink2"

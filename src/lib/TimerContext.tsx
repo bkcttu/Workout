@@ -130,9 +130,10 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     (seconds: number) => {
       firedRef.current = false
       setRemaining((r) => {
-        const next = r + seconds
+        const next = Math.max(0, r + seconds)
+        const delta = next - r
         if (running && endAtRef.current != null) {
-          endAtRef.current = endAtRef.current + seconds * 1000
+          endAtRef.current = endAtRef.current + delta * 1000
         }
         return next
       })

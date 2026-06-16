@@ -18,6 +18,7 @@ export type Exercise = {
   equipment?: string // the specific gear/bar/attachment to grab for this lift
   muscles?: { primary: MuscleId[]; secondary?: MuscleId[] } // for the muscle map
   demoGif?: string // local asset path to a bundled demo animation (optional)
+  suggested?: { weight?: number; note?: string } // coach calibration start weight
   form: FormPoint[] // 3 points each
 }
 
@@ -91,6 +92,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd1-incline-db-press',
+        suggested: { weight: 75, note: 'per hand' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'triceps', 'chest'] },
         name: 'Incline Dumbbell Press (bench 30–45°)',
         equipment: 'Dumbbells (5–100 lb) · adjustable bench 30–45°',
@@ -108,6 +110,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-low-high-fly',
+        suggested: { weight: 25, note: 'per side / stack' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'chest'] },
         name: 'Low-to-High Cable Fly',
         equipment: 'Sorinex functional trainer · dual low pulleys + ARC handles (alt: Tonal)',
@@ -125,6 +128,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-incline-bb-press',
+        suggested: { weight: 155, note: 'total bar' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'triceps', 'chest'] },
         name: 'Incline Barbell Press (or Reverse-Grip Bench)',
         equipment: 'Texas Power Bar · Sorinex rack safeties · bench 30–45° (alt: Kabuki bar)',
@@ -140,6 +144,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-landmine-press',
+        suggested: { weight: 45, note: 'plate on bar, per side' },
         muscles: { primary: ['upper-chest', 'front-delts'], secondary: ['side-delts', 'triceps', 'abs'] },
         name: 'Standing Landmine Press',
         equipment: 'Landmine attachment · Darko shorty bar',
@@ -155,6 +160,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-rope-pushdown',
+        suggested: { weight: 50, note: 'stack' },
         muscles: { primary: ['triceps'] },
         name: 'Triceps Rope Pushdown',
         equipment: 'Sorinex functional trainer · Spiral Strength rope (alt: Tonal)',
@@ -170,6 +176,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-pallof-press',
+        suggested: { weight: 20, note: 'stack' },
         muscles: { primary: ['abs', 'obliques'], secondary: ['lower-back'] },
         name: 'Cable Pallof Press',
         equipment: 'Sorinex functional trainer + PureTorque PRO (or D-handle), chest height',
@@ -185,6 +192,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-feet-elev-pushup',
+        suggested: { note: 'bodyweight — log reps' },
         muscles: { primary: ['upper-chest'], secondary: ['chest', 'front-delts', 'triceps'] },
         name: 'Feet-Elevated Push-Up (optional finisher)',
         optional: true,
@@ -220,6 +228,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd2-trap-rdl',
+        suggested: { weight: 225, note: 'total bar — stop before the back rounds' },
         muscles: { primary: ['hamstrings', 'glutes'], secondary: ['lower-back', 'traps', 'forearms'] },
         name: 'Trap Bar Romanian Deadlift',
         equipment: 'REP Open Trap Bar',
@@ -238,6 +247,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-bulgarian',
+        suggested: { weight: 50, note: 'per hand' },
         muscles: { primary: ['quads', 'glutes'], secondary: ['hamstrings', 'adductors'] },
         name: 'Dumbbell Bulgarian Split Squat',
         equipment: 'Dumbbells (5–100 lb) · bench',
@@ -253,6 +263,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-hip-thrust',
+        suggested: { weight: 185, note: 'total bar' },
         muscles: { primary: ['glutes'], secondary: ['hamstrings'] },
         name: 'Hip Thrust',
         equipment: 'Texas Power Bar · bench · hip pad (alt: Kabuki bar)',
@@ -268,6 +279,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-woodchopper',
+        suggested: { weight: 30, note: 'stack' },
         muscles: { primary: ['obliques', 'abs'], secondary: ['side-delts'] },
         name: 'Cable Woodchopper',
         equipment: 'Sorinex functional trainer + PureTorque PRO (golf rotation)',
@@ -283,6 +295,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-med-ball-throw',
+        suggested: { weight: 12, note: 'med ball — speed over load' },
         muscles: { primary: ['obliques'], secondary: ['abs', 'side-delts'] },
         name: 'Medicine-Ball Rotational Throw',
         equipment: 'Wall / medicine ball · wall (REP slam balls)',
@@ -298,6 +311,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-suitcase-carry',
+        suggested: { weight: 70, note: 'one hand' },
         muscles: { primary: ['obliques'], secondary: ['traps', 'forearms', 'abs'] },
         name: 'Suitcase Carry',
         equipment: 'One heavy dumbbell or kettlebell (alt: REP Open Trap Bar)',
@@ -328,6 +342,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd3-pullup',
+        suggested: { note: 'bodyweight — add a belt once 10 is easy' },
         muscles: { primary: ['lats'], secondary: ['biceps', 'mid-back', 'rear-delts', 'forearms'] },
         name: 'Pull-Up',
         equipment: 'Pull-up bar + Angles90 grips',
@@ -342,6 +357,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-chest-row',
+        suggested: { weight: 60, note: 'per hand / stack' },
         muscles: { primary: ['lats', 'mid-back'], secondary: ['rear-delts', 'biceps'] },
         name: 'Chest-Supported Row',
         equipment: 'Sorinex functional trainer + Mutant ARC / V-grip (or Angles90)',
@@ -356,6 +372,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-incline-fly',
+        suggested: { weight: 20, note: 'per side / stack' },
         muscles: { primary: ['upper-chest'], secondary: ['chest', 'front-delts'] },
         name: 'Incline Cable Fly (lighter)',
         equipment: 'Sorinex functional trainer · low pulleys + handles (alt: Tonal)',
@@ -371,6 +388,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-lat-pulldown',
+        suggested: { weight: 140, note: 'stack' },
         muscles: { primary: ['lats'], secondary: ['biceps', 'mid-back'] },
         name: 'Lat Pulldown',
         equipment: 'Sorinex functional trainer · MostGrip lat bar (alt: Tonal)',
@@ -386,6 +404,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-face-pull',
+        suggested: { weight: 40, note: 'stack — light, chase the squeeze' },
         muscles: { primary: ['rear-delts'], secondary: ['traps', 'mid-back'] },
         name: 'Face Pull',
         equipment: 'Sorinex functional trainer · Spiral Strength rope, upper pulley (alt: bands)',
@@ -401,6 +420,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-ab-wheel',
+        suggested: { note: 'bodyweight — log reps' },
         muscles: { primary: ['abs'], secondary: ['obliques', 'lats'] },
         name: 'Ab Wheel Rollout',
         equipment: 'Ab roller / ab wheel',
@@ -443,6 +463,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd5-incline-bb-press',
+        suggested: { weight: 150, note: 'total bar' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'triceps', 'chest'] },
         name: 'Incline Barbell Press',
         equipment: 'Texas Power Bar · Sorinex rack safeties · bench 30–45° (alt: Kabuki bar)',
@@ -458,6 +479,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-flat-db-press',
+        suggested: { weight: 75, note: 'per hand' },
         muscles: { primary: ['chest'], secondary: ['front-delts', 'triceps'] },
         name: 'Flat Dumbbell Press',
         equipment: 'Dumbbells (5–100 lb) · flat bench',
@@ -472,6 +494,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-cable-fly-mid',
+        suggested: { weight: 25, note: 'per side / stack' },
         muscles: { primary: ['chest'], secondary: ['front-delts', 'upper-chest'] },
         name: 'Cable Fly (mid height)',
         equipment: 'Sorinex functional trainer · chest-height pulleys + handles (alt: Tonal)',
@@ -487,6 +510,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-db-shoulder-press',
+        suggested: { weight: 55, note: 'per hand' },
         muscles: { primary: ['front-delts'], secondary: ['side-delts', 'triceps'] },
         name: 'Dumbbell Shoulder Press',
         equipment: 'Dumbbells (5–100 lb) · upright bench',
@@ -501,6 +525,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-lateral-raise',
+        suggested: { weight: 20, note: 'per hand — strict, no swing' },
         muscles: { primary: ['side-delts'], secondary: ['front-delts'] },
         name: 'Dumbbell Lateral Raise',
         equipment: 'Dumbbells (alt: Sorinex cable · single handle)',
@@ -516,6 +541,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-biceps-curl',
+        suggested: { weight: 35, note: 'per hand' },
         muscles: { primary: ['biceps'], secondary: ['forearms'] },
         name: 'Dumbbell Biceps Curl',
         equipment: 'Dumbbells (alt: Rogue curl-bar cable attachment)',
@@ -529,6 +555,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-weighted-dip',
+        suggested: { weight: 25, note: 'added load via belt (+25 lb)' },
         muscles: { primary: ['chest'], secondary: ['triceps', 'front-delts'] },
         name: 'Weighted Dip (optional finisher)',
         optional: true,
