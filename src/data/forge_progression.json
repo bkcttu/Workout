@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "defaultWeek": 2,
+  "_note": "Per-week starting weights, matched by day title + exercise name. Week 1 = baseline (no pre-fill, carry last session). sets[] length matches the exercise's set count; use null for bodyweight/blank. Replace these numbers with your real plan — keys must match the day titles and exercise names in src/data/plan.ts.",
+  "exercises": [
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Incline Dumbbell Press (bench 30–45°)",
+      "weeks": {
+        "2": { "sets": [75, 75, 75, 75], "note": "Wk2 — match/beat baseline, ~1–2 reps in reserve." },
+        "3": { "sets": [80, 80, 80, 80], "note": "Wk3 — small jump, aim top of 6–8." },
+        "4": { "sets": [85, 85, 82, 82], "note": "Wk4 — peak load, then deload/retest." }
+      }
+    },
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Low-to-High Cable Fly",
+      "weeks": {
+        "2": { "sets": [25, 25, 25, 25], "note": "Wk2 — per side, control the negative." },
+        "3": { "sets": [27.5, 27.5, 27.5, 27.5], "note": "Wk3 — slight bump, full sweep." },
+        "4": { "sets": [30, 30, 30, 30], "note": "Wk4 — peak, keep the squeeze." }
+      }
+    },
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Incline Barbell Press (or Reverse-Grip Bench)",
+      "weeks": {
+        "2": { "sets": [155, 155, 155], "note": "Wk2 — total bar." },
+        "3": { "sets": [165, 165, 165], "note": "Wk3 — +10 lb." },
+        "4": { "sets": [170, 170, 170], "note": "Wk4 — peak; safeties on if reverse grip." }
+      }
+    },
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Standing Landmine Press",
+      "weeks": {
+        "2": { "sets": [45, 45, 45], "note": "Wk2 — plate on bar, per side; brace abs." },
+        "3": { "sets": [50, 50, 50], "note": "Wk3 — +5 lb/side." },
+        "4": { "sets": [55, 55, 55], "note": "Wk4 — peak; no low-back arch." }
+      }
+    },
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Triceps Rope Pushdown",
+      "weeks": {
+        "2": { "sets": [50, 50, 50], "note": "Wk2 — stack; elbows pinned." },
+        "3": { "sets": [55, 55, 55], "note": "Wk3 — +5 lb." },
+        "4": { "sets": [60, 60, 60], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Cable Pallof Press",
+      "weeks": {
+        "2": { "sets": [20, 20, 20], "note": "Wk2 — stack; resist the rotation slow." },
+        "3": { "sets": [22.5, 22.5, 22.5], "note": "Wk3 — small bump." },
+        "4": { "sets": [25, 25, 25], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 1 · Upper-Chest Priority",
+      "name": "Feet-Elevated Push-Up (optional finisher)",
+      "weeks": {
+        "2": { "sets": [null, null], "note": "Wk2 — bodyweight AMRAP." },
+        "3": { "sets": [null, null], "note": "Wk3 — add reps or a plate on the back." },
+        "4": { "sets": [null, null], "note": "Wk4 — myo-rep clusters to failure." }
+      }
+    },
+
+    {
+      "day": "Day 2 · Lower + Rotation",
+      "name": "Trap Bar Romanian Deadlift",
+      "weeks": {
+        "2": { "sets": [225, 225, 225], "note": "Wk2 — total bar; stop before the back rounds. ⚠️" },
+        "3": { "sets": [245, 245, 245], "note": "Wk3 — +20 lb, same strict hinge. ⚠️" },
+        "4": { "sets": [255, 255, 255], "note": "Wk4 — peak; quality over grind. ⚠️" }
+      }
+    },
+    {
+      "day": "Day 2 · Lower + Rotation",
+      "name": "Dumbbell Bulgarian Split Squat",
+      "weeks": {
+        "2": { "sets": [50, 50, 50], "note": "Wk2 — per hand; front heel drive." },
+        "3": { "sets": [55, 55, 55], "note": "Wk3 — +5/hand." },
+        "4": { "sets": [60, 60, 60], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 2 · Lower + Rotation",
+      "name": "Hip Thrust",
+      "weeks": {
+        "2": { "sets": [185, 185, 185], "note": "Wk2 — total bar; flat torso at top." },
+        "3": { "sets": [205, 205, 205], "note": "Wk3 — +20 lb." },
+        "4": { "sets": [225, 225, 225], "note": "Wk4 — peak; hard glute squeeze." }
+      }
+    },
+    {
+      "day": "Day 2 · Lower + Rotation",
+      "name": "Cable Woodchopper",
+      "weeks": {
+        "2": { "sets": [30, 30, 30], "note": "Wk2 — stack; power from the trunk." },
+        "3": { "sets": [35, 35, 35], "note": "Wk3 — +5 lb." },
+        "4": { "sets": [40, 40, 40], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 2 · Lower + Rotation",
+      "name": "Medicine-Ball Rotational Throw",
+      "weeks": {
+        "2": { "sets": [12, 12, 12], "note": "Wk2 — med ball; speed over load." },
+        "3": { "sets": [12, 12, 12], "note": "Wk3 — same ball, faster hips." },
+        "4": { "sets": [14, 14, 14], "note": "Wk4 — heavier ball if speed holds." }
+      }
+    },
+    {
+      "day": "Day 2 · Lower + Rotation",
+      "name": "Suitcase Carry",
+      "weeks": {
+        "2": { "sets": [70, 70, 70], "note": "Wk2 — one hand; ribs stacked, no side bend. ⚠️" },
+        "3": { "sets": [80, 80, 80], "note": "Wk3 — +10 lb." },
+        "4": { "sets": [88, 88, 88], "note": "Wk4 — peak." }
+      }
+    },
+
+    {
+      "day": "Day 3 · Back + Chest Pump",
+      "name": "Pull-Up",
+      "weeks": {
+        "2": { "sets": [null, null, null, null], "note": "Wk2 — bodyweight; log added load if any." },
+        "3": { "sets": [null, null, null, null], "note": "Wk3 — add reps or a 10 lb belt." },
+        "4": { "sets": [null, null, null, null], "note": "Wk4 — peak; weighted if 10 is easy." }
+      }
+    },
+    {
+      "day": "Day 3 · Back + Chest Pump",
+      "name": "Chest-Supported Row",
+      "weeks": {
+        "2": { "sets": [60, 60, 60], "note": "Wk2 — per hand/stack; chest stays on pad." },
+        "3": { "sets": [65, 65, 65], "note": "Wk3 — +5 lb." },
+        "4": { "sets": [70, 70, 70], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 3 · Back + Chest Pump",
+      "name": "Incline Cable Fly (lighter)",
+      "weeks": {
+        "2": { "sets": [20, 20, 20], "note": "Wk2 — per side; constant tension." },
+        "3": { "sets": [22.5, 22.5, 22.5], "note": "Wk3 — small bump." },
+        "4": { "sets": [25, 25, 25], "note": "Wk4 — peak pump." }
+      }
+    },
+    {
+      "day": "Day 3 · Back + Chest Pump",
+      "name": "Lat Pulldown",
+      "weeks": {
+        "2": { "sets": [140, 140, 140], "note": "Wk2 — stack; elbows to ribs." },
+        "3": { "sets": [150, 150, 150], "note": "Wk3 — +10 lb." },
+        "4": { "sets": [160, 160, 160], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 3 · Back + Chest Pump",
+      "name": "Face Pull",
+      "weeks": {
+        "2": { "sets": [40, 40, 40], "note": "Wk2 — stack; chase the squeeze." },
+        "3": { "sets": [45, 45, 45], "note": "Wk3 — small bump, stay strict." },
+        "4": { "sets": [50, 50, 50], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 3 · Back + Chest Pump",
+      "name": "Ab Wheel Rollout",
+      "weeks": {
+        "2": { "sets": [null, null, null], "note": "Wk2 — bodyweight; stop before the low back sags. ⚠️" },
+        "3": { "sets": [null, null, null], "note": "Wk3 — longer range, neutral spine. ⚠️" },
+        "4": { "sets": [null, null, null], "note": "Wk4 — full rollout if control holds. ⚠️" }
+      }
+    },
+
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Incline Barbell Press",
+      "weeks": {
+        "2": { "sets": [150, 150, 150, 150], "note": "Wk2 — total bar; bar to upper chest." },
+        "3": { "sets": [160, 160, 160, 160], "note": "Wk3 — +10 lb." },
+        "4": { "sets": [165, 165, 165, 165], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Flat Dumbbell Press",
+      "weeks": {
+        "2": { "sets": [75, 75, 75], "note": "Wk2 — per hand; full stretch." },
+        "3": { "sets": [80, 80, 80], "note": "Wk3 — +5/hand." },
+        "4": { "sets": [85, 85, 85], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Cable Fly (mid height)",
+      "weeks": {
+        "2": { "sets": [25, 25, 25], "note": "Wk2 — per side; squeeze out front." },
+        "3": { "sets": [27.5, 27.5, 27.5], "note": "Wk3 — small bump." },
+        "4": { "sets": [30, 30, 30], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Dumbbell Shoulder Press",
+      "weeks": {
+        "2": { "sets": [55, 55, 55], "note": "Wk2 — per hand; brace, no low-back arch. ⚠️" },
+        "3": { "sets": [60, 60, 60], "note": "Wk3 — +5/hand." },
+        "4": { "sets": [65, 65, 65], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Dumbbell Lateral Raise",
+      "weeks": {
+        "2": { "sets": [20, 20, 20], "note": "Wk2 — per hand; strict, no swing." },
+        "3": { "sets": [22.5, 22.5, 22.5], "note": "Wk3 — small bump." },
+        "4": { "sets": [25, 25, 25], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Dumbbell Biceps Curl",
+      "weeks": {
+        "2": { "sets": [35, 35, 35], "note": "Wk2 — per hand; no swing." },
+        "3": { "sets": [37.5, 37.5, 37.5], "note": "Wk3 — small bump." },
+        "4": { "sets": [40, 40, 40], "note": "Wk4 — peak." }
+      }
+    },
+    {
+      "day": "Day 5 · Chest Volume + Shoulders + Arms",
+      "name": "Weighted Dip (optional finisher)",
+      "weeks": {
+        "2": { "sets": [25, 25], "note": "Wk2 — added load via belt." },
+        "3": { "sets": [35, 35], "note": "Wk3 — +10 lb." },
+        "4": { "sets": [45, 45], "note": "Wk4 — peak." }
+      }
+    }
+  ]
+}

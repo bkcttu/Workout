@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Check, ChevronDown, Play } from 'lucide-react'
+import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import {
   DAYS,
   MUSCLE_LABELS,
@@ -13,6 +13,7 @@ import { demoFor, isGif } from '../lib/demos'
 import { useStore } from '../lib/StoreContext'
 import { useTimer } from '../lib/TimerContext'
 import { useWakeLock } from '../lib/useWakeLock'
+import { MAX_WEEK, MIN_WEEK, planFor } from '../lib/progression'
 import {
   prevSessionOf,
   todayISO,
@@ -24,15 +25,33 @@ import {
 
 const SUPERSET_TRANSITION_SEC = 20
 
-function buildSets(store: Store, ex: Exercise): SetLog[] {
+// Current day title + plan week, so per-exercise logging can pre-fill from the
+// week plan without prop-drilling.
+const DayCtx = createContext<{ dayTitle: string; week: number } | null>(null)
+
+function buildSets(
+  store: Store,
+  ex: Exercise,
+  ctx?: { dayTitle: string; week: number } | null,
+): SetLog[] {
   const today = todaySessionOf(store, ex.id)
-  const prev = prevSessionOf(store, ex.id)
   const out: SetLog[] = []
+  if (today) {
+    for (let i = 0; i < ex.targetSets; i++)
+      out.push(today.sets[i] ?? { weight: null, reps: null, done: false })
+    return out
+  }
+  const plan = ctx ? planFor(ctx.dayTitle, ex.name, ctx.week) : null
+  const prev = prevSessionOf(store, ex.id)
   for (let i = 0; i < ex.targetSets; i++) {
-    if (today && today.sets[i]) out.push(today.sets[i])
-    else if (prev && prev.sets[i])
+    if (plan) {
+      const w = plan.sets[i]
+      out.push({ weight: w == null ? null : w, reps: null, done: false })
+    } else if (prev && prev.sets[i]) {
       out.push({ weight: prev.sets[i].weight, reps: prev.sets[i].reps, done: false })
-    else out.push({ weight: null, reps: null, done: false })
+    } else {
+      out.push({ weight: null, reps: null, done: false })
+    }
   }
   return out
 }
@@ -58,20 +77,21 @@ function muscleValues(ex: Exercise): Partial<Record<MuscleId, number>> {
 
 function useExerciseLog(ex: Exercise) {
   const { store, setStore } = useStore()
-  const sets = buildSets(store, ex)
+  const ctx = useContext(DayCtx)
+  const sets = buildSets(store, ex, ctx)
   const prev = prevSessionOf(store, ex.id)
   const today = todaySessionOf(store, ex.id)
   const complete = !!today && today.sets.length >= ex.targetSets && today.sets.every((s) => s.done)
 
   const update = (i: number, patch: Partial<SetLog>) =>
     setStore((s) => {
-      const cur = buildSets(s, ex)
+      const cur = buildSets(s, ex, ctx)
       cur[i] = { ...cur[i], ...patch }
       return writeSession(s, ex.id, cur)
     })
 
   const markDone = () =>
-    setStore((s) => writeSession(s, ex.id, buildSets(s, ex).map((x) => ({ ...x, done: true }))))
+    setStore((s) => writeSession(s, ex.id, buildSets(s, ex, ctx).map((x) => ({ ...x, done: true }))))
 
   return { sets, prev, complete, update, markDone }
 }
@@ -199,6 +219,8 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
   const secondary = ex.muscles?.secondary ?? []
   const demo = demoFor(ex.id) ?? ex.demoGif
   const noHistory = !log.prev
+  const ctx = useContext(DayCtx)
+  const plan = ctx ? planFor(ctx.dayTitle, ex.name, ctx.week) : null
 
   return (
     <div className="pt-1">
@@ -208,7 +230,7 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
           <span>{ex.equipment}</span>
         </p>
       )}
-      {ex.suggested && noHistory && (
+      {ex.suggested && noHistory && !plan && (
         <p className="mb-3 flex items-center gap-1.5 text-xs text-accent">
           <span aria-hidden>💪</span>
           <span>
@@ -308,6 +330,7 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
       )}
 
       <SetGrid ex={ex} {...log} />
+      {plan?.note && <p className="mt-2 text-xs text-dim">{plan.note}</p>}
     </div>
   )
 }
@@ -610,26 +633,54 @@ export default function Day() {
 
   const completed = store.dayCompleted[day.id]
   const groups = day.tracked ? groupExercises(day.exercises ?? []) : []
+  const week = Math.min(MAX_WEEK, Math.max(MIN_WEEK, store.programWeek))
+  const setWeek = (delta: number) =>
+    setStore((s) => ({
+      ...s,
+      programWeek: Math.min(MAX_WEEK, Math.max(MIN_WEEK, s.programWeek + delta)),
+    }))
 
   return (
-    <div className="safe-top px-5">
-      <header className="sticky top-0 z-30 -mx-5 mb-4 bg-bg/85 px-5 py-3 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/')}
-            className="press grid h-9 w-9 shrink-0 place-items-center rounded-ctl border border-hairline text-text"
-            aria-label="Back"
-          >
-            <ArrowLeft size={18} />
-          </button>
-          <div className="min-w-0">
-            <div className="eyebrow truncate">{day.focus}</div>
-            <h1 className="display truncate text-[20px] leading-tight text-text">
-              {day.title.replace(/^Day \d+ · /, '')}
-            </h1>
+    <DayCtx.Provider value={{ dayTitle: day.title, week }}>
+      <div className="safe-top px-5">
+        <header className="sticky top-0 z-30 -mx-5 mb-4 bg-bg/85 px-5 py-3 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/')}
+              className="press grid h-9 w-9 shrink-0 place-items-center rounded-ctl border border-hairline text-text"
+              aria-label="Back"
+            >
+              <ArrowLeft size={18} />
+            </button>
+            <div className="min-w-0 flex-1">
+              <div className="eyebrow truncate">{day.focus}</div>
+              <h1 className="display truncate text-[20px] leading-tight text-text">
+                {day.title.replace(/^Day \d+ · /, '')}
+              </h1>
+            </div>
+            {day.tracked && (
+              <div className="flex shrink-0 items-center gap-0.5 rounded-ctl border border-hairline p-1">
+                <button
+                  onClick={() => setWeek(-1)}
+                  disabled={week <= MIN_WEEK}
+                  aria-label="Previous week"
+                  className="press grid h-7 w-7 place-items-center text-ink2 disabled:opacity-30"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="tnum px-1 text-xs font-semibold text-accent">WK {week}</span>
+                <button
+                  onClick={() => setWeek(1)}
+                  disabled={week >= MAX_WEEK}
+                  aria-label="Next week"
+                  className="press grid h-7 w-7 place-items-center text-ink2 disabled:opacity-30"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
           </div>
-        </div>
-      </header>
+        </header>
 
       {day.tracked ? (
         <div className="space-y-4">
@@ -658,9 +709,10 @@ export default function Day() {
             <p className="tnum text-center text-xs text-brass">Last completed {completed}</p>
           )}
         </div>
-      ) : (
-        <Freestyle dayId={day.id} items={day.checklist ?? []} />
-      )}
-    </div>
+        ) : (
+          <Freestyle dayId={day.id} items={day.checklist ?? []} />
+        )}
+      </div>
+    </DayCtx.Provider>
   )
 }

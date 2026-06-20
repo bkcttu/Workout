@@ -8,6 +8,7 @@ import {
   PROTEIN_STAPLES,
   type Staple,
 } from '../data/plan'
+import { PROGRESSION_DEFAULT_WEEK } from './progression'
 
 const KEY = 'forge.v1'
 
@@ -43,6 +44,7 @@ export type Store = {
   dayCompleted: Record<string /*dayId*/, string /*ISO date*/>
   bodyweight: { date: string; lbs: number }[]
   supplementsDone: Record<string /*ISO date*/, string[]> // checked supplement names per day
+  programWeek: number // current plan week (1–4) driving weight pre-fill
   hydration: Hydration
   nutrition: Nutrition
 }
@@ -90,6 +92,7 @@ export function defaultStore(): Store {
     dayCompleted: {},
     bodyweight: [],
     supplementsDone: {},
+    programWeek: PROGRESSION_DEFAULT_WEEK,
     hydration: defaultHydration(),
     nutrition: defaultNutrition(),
   }
@@ -111,6 +114,8 @@ export function loadStore(): Store {
       dayCompleted: parsed.dayCompleted ?? base.dayCompleted,
       bodyweight: parsed.bodyweight ?? base.bodyweight,
       supplementsDone: parsed.supplementsDone ?? base.supplementsDone,
+      programWeek:
+        typeof parsed.programWeek === 'number' ? parsed.programWeek : base.programWeek,
       hydration: { ...base.hydration, ...(parsed.hydration ?? {}) },
       nutrition: {
         ...base.nutrition,
