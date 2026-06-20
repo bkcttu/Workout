@@ -256,6 +256,13 @@ function ExerciseDetail({ ex }: { ex: Exercise }) {
         ))}
       </ul>
 
+      {ex.isolation && (
+        <div className="mt-3 rounded-ctl bg-accent/10 p-3 text-sm text-accent">
+          <span className="font-semibold">🎯 Isolate — </span>
+          {ex.isolation}
+        </div>
+      )}
+
       <div className="mt-3 flex flex-wrap gap-2">
         {demo ? (
           <button

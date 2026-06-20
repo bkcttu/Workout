@@ -19,6 +19,7 @@ export type Exercise = {
   muscles?: { primary: MuscleId[]; secondary?: MuscleId[] } // for the muscle map
   demoGif?: string // local asset path to a bundled demo animation (optional)
   suggested?: { weight?: number; note?: string } // coach calibration start weight
+  isolation?: string // mind-muscle cue: how to really target the working muscle
   form: FormPoint[] // 3 points each
 }
 
@@ -92,6 +93,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd1-incline-db-press',
+        isolation: 'Think “elbows toward the ceiling, squeeze the upper chest.” Pause 1s at the bottom stretch and drive with the pecs — not the front delts.',
         suggested: { weight: 75, note: 'per hand' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'triceps', 'chest'] },
         name: 'Incline Dumbbell Press (bench 30–45°)',
@@ -110,6 +112,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-low-high-fly',
+        isolation: 'Lead with the pinkies and sweep up to your collarbone, crossing slightly. Imagine hugging up-and-in; keep tension off the front delt and hold the squeeze 1s.',
         suggested: { weight: 25, note: 'per side / stack' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'chest'] },
         name: 'Low-to-High Cable Fly',
@@ -128,6 +131,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-incline-bb-press',
+        isolation: 'Use a “bend the bar apart” cue to switch the chest on. Touch high on the chest and drive up over the collarbone so the upper pec does the work.',
         suggested: { weight: 155, note: 'total bar' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'triceps', 'chest'] },
         name: 'Incline Barbell Press (or Reverse-Grip Bench)',
@@ -144,6 +148,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-landmine-press',
+        isolation: 'Press up AND in across the midline and squeeze the upper chest at the top. Keep ribs down so it’s the pec finishing the rep, not just the front delt.',
         suggested: { weight: 45, note: 'plate on bar, per side' },
         muscles: { primary: ['upper-chest', 'front-delts'], secondary: ['side-delts', 'triceps', 'abs'] },
         name: 'Standing Landmine Press',
@@ -160,6 +165,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-rope-pushdown',
+        isolation: 'Pin the elbows to your sides so only the forearms move. Turn the pinkies out and spread the rope at lockout to fully shorten the triceps; hold 1s.',
         suggested: { weight: 50, note: 'stack' },
         muscles: { primary: ['triceps'] },
         name: 'Triceps Rope Pushdown',
@@ -176,6 +182,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-pallof-press',
+        isolation: 'Don’t press with the arms — brace the abs and obliques and refuse to rotate. The slower you move, the more the deep core does the work.',
         suggested: { weight: 20, note: 'stack' },
         muscles: { primary: ['abs', 'obliques'], secondary: ['lower-back'] },
         name: 'Cable Pallof Press',
@@ -192,6 +199,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd1-feet-elev-pushup',
+        isolation: 'At the top, push the floor away and round the upper back slightly (protract) to peak-contract the chest. Lower slow to a deep stretch.',
         suggested: { note: 'bodyweight — log reps' },
         muscles: { primary: ['upper-chest'], secondary: ['chest', 'front-delts', 'triceps'] },
         name: 'Feet-Elevated Push-Up (optional finisher)',
@@ -228,6 +236,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd2-trap-rdl',
+        isolation: 'Chase the hamstring stretch on the way down — push the hips back with soft knees. Drive the floor away and squeeze the glutes to lock out, never the low back. ⚠️',
         suggested: { weight: 225, note: 'total bar — stop before the back rounds' },
         muscles: { primary: ['hamstrings', 'glutes'], secondary: ['lower-back', 'traps', 'forearms'] },
         name: 'Trap Bar Romanian Deadlift',
@@ -247,6 +256,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-bulgarian',
+        isolation: 'Drive through the front heel/mid-foot and let the front glute and quad do everything — the rear leg is just a kickstand for balance.',
         suggested: { weight: 50, note: 'per hand' },
         muscles: { primary: ['quads', 'glutes'], secondary: ['hamstrings', 'adductors'] },
         name: 'Dumbbell Bulgarian Split Squat',
@@ -263,6 +273,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-hip-thrust',
+        isolation: 'Tuck the ribs and chin (posterior tilt), drive through the heels, and squeeze the glutes hard at the top — the tuck keeps it glutes, not low back.',
         suggested: { weight: 185, note: 'total bar' },
         muscles: { primary: ['glutes'], secondary: ['hamstrings'] },
         name: 'Hip Thrust',
@@ -279,6 +290,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-woodchopper',
+        isolation: 'Keep the arms long and rotate from the trunk — feel the obliques turn the torso. Let the hips pivot, but the core supplies the power.',
         suggested: { weight: 30, note: 'stack' },
         muscles: { primary: ['obliques', 'abs'], secondary: ['side-delts'] },
         name: 'Cable Woodchopper',
@@ -295,6 +307,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-med-ball-throw',
+        isolation: 'Coil into the back hip, then whip the torso — the obliques fire the throw and the arms just deliver the ball. Speed over weight.',
         suggested: { weight: 12, note: 'med ball — speed over load' },
         muscles: { primary: ['obliques'], secondary: ['abs', 'side-delts'] },
         name: 'Medicine-Ball Rotational Throw',
@@ -311,6 +324,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd2-suitcase-carry',
+        isolation: 'Stand tall and brace the side opposite the weight — feel that oblique fighting to keep you from leaning. No side bend. ⚠️',
         suggested: { weight: 70, note: 'one hand' },
         muscles: { primary: ['obliques'], secondary: ['traps', 'forearms', 'abs'] },
         name: 'Suitcase Carry',
@@ -342,6 +356,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd3-pullup',
+        isolation: 'Start by pulling the shoulder blades down and back before the arms bend, then drive the elbows toward your back pockets — that biases the lats over the biceps.',
         suggested: { note: 'bodyweight — add a belt once 10 is easy' },
         muscles: { primary: ['lats'], secondary: ['biceps', 'mid-back', 'rear-delts', 'forearms'] },
         name: 'Pull-Up',
@@ -357,6 +372,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-chest-row',
+        isolation: 'Lead with the elbows, pull to the lower ribs, and squeeze the shoulder blades together 1s. Treat the hands as hooks so the mid-back works, not the biceps.',
         suggested: { weight: 60, note: 'per hand / stack' },
         muscles: { primary: ['lats', 'mid-back'], secondary: ['rear-delts', 'biceps'] },
         name: 'Chest-Supported Row',
@@ -372,6 +388,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-incline-fly',
+        isolation: 'Soft, fixed elbows and constant tension — squeeze the pecs together at the top and resist the stretch on the way out. Chase the squeeze, not the load.',
         suggested: { weight: 20, note: 'per side / stack' },
         muscles: { primary: ['upper-chest'], secondary: ['chest', 'front-delts'] },
         name: 'Incline Cable Fly (lighter)',
@@ -388,6 +405,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-lat-pulldown',
+        isolation: 'Slight lean back and drive the elbows down and into the ribs — think “elbows to hips.” Pull with the back, let the hands just hold the bar.',
         suggested: { weight: 140, note: 'stack' },
         muscles: { primary: ['lats'], secondary: ['biceps', 'mid-back'] },
         name: 'Lat Pulldown',
@@ -404,6 +422,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-face-pull',
+        isolation: 'Pull to the forehead, split the hands apart and externally rotate (thumbs point back). Keep it light and feel the rear delts and mid-traps, not the arms.',
         suggested: { weight: 40, note: 'stack — light, chase the squeeze' },
         muscles: { primary: ['rear-delts'], secondary: ['traps', 'mid-back'] },
         name: 'Face Pull',
@@ -420,6 +439,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd3-ab-wheel',
+        isolation: 'Brace and tuck the pelvis under (posterior tilt) — feel the abs resisting extension the whole way. Stop the instant the low back wants to arch. ⚠️',
         suggested: { note: 'bodyweight — log reps' },
         muscles: { primary: ['abs'], secondary: ['obliques', 'lats'] },
         name: 'Ab Wheel Rollout',
@@ -463,6 +483,7 @@ export const DAYS: Day[] = [
     exercises: [
       {
         id: 'd5-incline-bb-press',
+        isolation: 'Retract the blades, “bend the bar,” and bar to the upper chest — drive up over the collarbone so the clavicular (upper) pec keeps the tension.',
         suggested: { weight: 150, note: 'total bar' },
         muscles: { primary: ['upper-chest'], secondary: ['front-delts', 'triceps', 'chest'] },
         name: 'Incline Barbell Press',
@@ -479,6 +500,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-flat-db-press',
+        isolation: 'Lower wide to a deep pec stretch, then press up and slightly together and squeeze at the top like a fly — finish the rep with the chest.',
         suggested: { weight: 75, note: 'per hand' },
         muscles: { primary: ['chest'], secondary: ['front-delts', 'triceps'] },
         name: 'Flat Dumbbell Press',
@@ -494,6 +516,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-cable-fly-mid',
+        isolation: 'Soft elbows, big arc, and squeeze the hands together out front — hold 1s. Constant tension, never press; the pecs should burn, not the shoulders.',
         suggested: { weight: 25, note: 'per side / stack' },
         muscles: { primary: ['chest'], secondary: ['front-delts', 'upper-chest'] },
         name: 'Cable Fly (mid height)',
@@ -510,6 +533,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-db-shoulder-press',
+        isolation: 'Press up and slightly in; lower to ear height for a deep delt stretch. Brace the abs so the low back stays flat and the shoulders do the work. ⚠️',
         suggested: { weight: 55, note: 'per hand' },
         muscles: { primary: ['front-delts'], secondary: ['side-delts', 'triceps'] },
         name: 'Dumbbell Shoulder Press',
@@ -525,6 +549,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-lateral-raise',
+        isolation: 'Lead with the elbows and “pour the pitcher” (pinkies slightly up), raise to shoulder height only, and lower slow — no traps, no swing, all side delt.',
         suggested: { weight: 20, note: 'per hand — strict, no swing' },
         muscles: { primary: ['side-delts'], secondary: ['front-delts'] },
         name: 'Dumbbell Lateral Raise',
@@ -541,6 +566,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-biceps-curl',
+        isolation: 'Pin the elbows at your sides and supinate (turn the pinky up) as you curl — squeeze hard at the top, full stretch at the bottom, no swing.',
         suggested: { weight: 35, note: 'per hand' },
         muscles: { primary: ['biceps'], secondary: ['forearms'] },
         name: 'Dumbbell Biceps Curl',
@@ -555,6 +581,7 @@ export const DAYS: Day[] = [
       },
       {
         id: 'd5-weighted-dip',
+        isolation: 'Lean the torso forward and let the elbows flare a touch to shift it to the chest; stretch at the bottom (no deeper than comfortable) and drive up squeezing the pecs. ⚠️',
         suggested: { weight: 25, note: 'added load via belt (+25 lb)' },
         muscles: { primary: ['chest'], secondary: ['triceps', 'front-delts'] },
         name: 'Weighted Dip (optional finisher)',

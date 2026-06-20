@@ -98,6 +98,12 @@ function Item({ entry }: { entry: (typeof CATALOG)[number] }) {
               </li>
             ))}
           </ul>
+          {ex.isolation && (
+            <div className="mt-3 rounded-ctl bg-accent/10 p-3 text-sm text-accent">
+              <span className="font-semibold">🎯 Isolate — </span>
+              {ex.isolation}
+            </div>
+          )}
           {secondary.length > 0 && (
             <p className="mt-3 text-xs text-dim">
               Secondary: {secondary.map((mu) => MUSCLE_LABELS[mu]).join(', ')}
