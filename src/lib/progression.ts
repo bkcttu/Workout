@@ -22,7 +22,7 @@ export const PROGRESSION_DEFAULT_WEEK: number =
     : 2
 
 export const MIN_WEEK = 1
-export const MAX_WEEK = 4
+export const MAX_WEEK = 5
 
 // Returns the planned sets + note for a given exercise & week, or null if there
 // is no match or the week has no plan (week 1, missing exercise, etc.).

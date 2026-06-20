@@ -1,7 +1,7 @@
 {
   "version": 1,
   "defaultWeek": 2,
-  "_note": "4-week block for an advanced ~182 lb lifter (upper-chest priority, protect L5/S1). Week 1 = baseline: set your working weights, no pre-fill. Wk2 accumulate (most sets ~1-2 reps in reserve), Wk3 intensify (small load jump, hold reps), Wk4 peak (top load, leave 1 in the tank) — then deload or retest and reset to Week 1. Numbers are coach targets, not gospel: your rep ranges govern. Matched by day title + exercise name; keep keys aligned with src/data/plan.ts.",
+  "_note": "5-week block for an advanced ~182 lb lifter (upper-chest priority, protect L5/S1). Week 1 = baseline: set your working weights, no pre-fill. Wk2 accumulate (~1-2 reps in reserve), Wk3 intensify (small load jump, hold reps), Wk4 peak (top load, leave 1 in the tank), Wk5 deload (~60%, 2 easy sets, 3-4 RIR) — then retest and reset to Week 1. Numbers are coach targets, not gospel: your rep ranges govern. Matched by day title + exercise name; keep keys aligned with src/data/plan.ts.",
   "exercises": [
     {
       "day": "Day 1 · Upper-Chest Priority",
@@ -9,7 +9,8 @@
       "weeks": {
         "2": { "sets": [75, 75, 75, 75], "note": "Accumulate — 7-8 reps/set at ~2 RIR. The money lift; own this weight." },
         "3": { "sets": [80, 80, 80, 80], "note": "Intensify — +5/hand, hold 6-8 reps. Drive up and slightly back." },
-        "4": { "sets": [85, 85, 80, 80], "note": "Peak — top 2 sets heavy for 6, back off last 2. Deload next week." }
+        "4": { "sets": [85, 85, 80, 80], "note": "Peak — top 2 sets heavy for 6, back off last 2." },
+        "5": { "sets": [45, 45, null, null], "note": "Deload — ~60%, 2 crisp sets, 3-4 in reserve. Recover, then retest from Week 1." }
       }
     },
     {
@@ -18,7 +19,8 @@
       "weeks": {
         "2": { "sets": [25, 25, 25, 25], "note": "Accumulate — per side, 12-15, sweep to the chin, slow negative." },
         "3": { "sets": [27.5, 27.5, 27.5, 27.5], "note": "Intensify — small bump, keep the soft-elbow arc." },
-        "4": { "sets": [30, 30, 27.5, 27.5], "note": "Peak — heavier first sets, chase the squeeze." }
+        "4": { "sets": [30, 30, 27.5, 27.5], "note": "Peak — heavier first sets, chase the squeeze." },
+        "5": { "sets": [15, 15, null, null], "note": "Deload — light, 2 sets, just move blood. Easy." }
       }
     },
     {
@@ -27,7 +29,8 @@
       "weeks": {
         "2": { "sets": [155, 155, 155], "note": "Accumulate — total bar, 8-10 at ~2 RIR." },
         "3": { "sets": [165, 165, 165], "note": "Intensify — +10 lb, bar to the upper-chest line." },
-        "4": { "sets": [175, 170, 165], "note": "Peak — top single-load then descend. Rack safeties on if reverse grip. ⚠️" }
+        "4": { "sets": [175, 170, 165], "note": "Peak — top single-load then descend. Rack safeties on if reverse grip. ⚠️" },
+        "5": { "sets": [95, 95, null], "note": "Deload — ~60%, 2 smooth sets, leave 3-4 in the tank." }
       }
     },
     {
@@ -36,7 +39,8 @@
       "weeks": {
         "2": { "sets": [45, 45, 45], "note": "Accumulate — plate/side, press up AND in, abs braced. ⚠️" },
         "3": { "sets": [50, 50, 50], "note": "Intensify — +5/side, no low-back arch. ⚠️" },
-        "4": { "sets": [55, 55, 50], "note": "Peak — top sets heavy, even reps each side." }
+        "4": { "sets": [55, 55, 50], "note": "Peak — top sets heavy, even reps each side." },
+        "5": { "sets": [25, 25, null], "note": "Deload — light, 2 sets, groove the path. ⚠️" }
       }
     },
     {
@@ -45,7 +49,8 @@
       "weeks": {
         "2": { "sets": [50, 50, 50], "note": "Accumulate — elbows pinned, spread and squeeze." },
         "3": { "sets": [55, 55, 55], "note": "Intensify — +5 lb, full stretch up top." },
-        "4": { "sets": [60, 60, 55], "note": "Peak — heavy first, back off the last." }
+        "4": { "sets": [60, 60, 55], "note": "Peak — heavy first, back off the last." },
+        "5": { "sets": [30, 30, null], "note": "Deload — light pump, 2 sets." }
       }
     },
     {
@@ -54,7 +59,8 @@
       "weeks": {
         "2": { "sets": [20, 20, 20], "note": "Accumulate — resist the rotation slow; this armors the low back. ⚠️" },
         "3": { "sets": [25, 25, 25], "note": "Intensify — +5 lb, stay side-on and braced. ⚠️" },
-        "4": { "sets": [30, 30, 25], "note": "Peak — top load, full control out and back." }
+        "4": { "sets": [30, 30, 25], "note": "Peak — top load, full control out and back." },
+        "5": { "sets": [10, 10, null], "note": "Deload — light, 2 sets, keep it clean. ⚠️" }
       }
     },
     {
@@ -63,7 +69,8 @@
       "weeks": {
         "2": { "sets": [null, null], "note": "Bodyweight AMRAP, ~1 RIR. Feet up = upper-chest bias." },
         "3": { "sets": [null, null], "note": "Add reps or a light plate on the back." },
-        "4": { "sets": [null, null], "note": "Myo-rep clusters to failure. Optional — skip if gassed." }
+        "4": { "sets": [null, null], "note": "Myo-rep clusters to failure. Optional — skip if gassed." },
+        "5": { "sets": [null, null], "note": "Deload — skip, or one easy set well shy of failure." }
       }
     },
 
@@ -73,7 +80,8 @@
       "weeks": {
         "2": { "sets": [225, 225, 225], "note": "Accumulate — total bar, 6-8. Hinge, stop before the back rounds. ⚠️" },
         "3": { "sets": [245, 245, 245], "note": "Intensify — +20 lb, same long spine, soft knees. ⚠️" },
-        "4": { "sets": [255, 255, 245], "note": "Peak — top sets heavy, technique first. Deload next week. ⚠️" }
+        "4": { "sets": [255, 255, 245], "note": "Peak — top sets heavy, technique first. ⚠️" },
+        "5": { "sets": [135, 135, null], "note": "Deload — ~60%, 2 light sets, pure technique. Back-friendly week. ⚠️" }
       }
     },
     {
@@ -82,7 +90,8 @@
       "weeks": {
         "2": { "sets": [50, 50, 50], "note": "Accumulate — per hand, front-heel drive, 8-10/leg." },
         "3": { "sets": [55, 55, 55], "note": "Intensify — +5/hand, knee tracks the toes." },
-        "4": { "sets": [60, 60, 55], "note": "Peak — heavy first sets, stay tall-ish." }
+        "4": { "sets": [60, 60, 55], "note": "Peak — heavy first sets, stay tall-ish." },
+        "5": { "sets": [30, 30, null], "note": "Deload — light, 2 sets, smooth tempo." }
       }
     },
     {
@@ -91,7 +100,8 @@
       "weeks": {
         "2": { "sets": [185, 185, 185], "note": "Accumulate — total bar, flat torso at top, ribs down." },
         "3": { "sets": [215, 215, 215], "note": "Intensify — +30 lb, hard glute squeeze." },
-        "4": { "sets": [245, 235, 225], "note": "Peak — top set heavy; don't hyperextend at the top. ⚠️" }
+        "4": { "sets": [245, 235, 225], "note": "Peak — top set heavy; don't hyperextend at the top. ⚠️" },
+        "5": { "sets": [115, 115, null], "note": "Deload — ~60%, 2 sets, squeeze without grinding." }
       }
     },
     {
@@ -100,7 +110,8 @@
       "weeks": {
         "2": { "sets": [30, 30, 30], "note": "Accumulate — power from the trunk, control the return." },
         "3": { "sets": [35, 35, 35], "note": "Intensify — +5 lb, hips and torso rotate together." },
-        "4": { "sets": [40, 40, 35], "note": "Peak — heavier first sets, no jerking the bottom." }
+        "4": { "sets": [40, 40, 35], "note": "Peak — heavier first sets, no jerking the bottom." },
+        "5": { "sets": [20, 20, null], "note": "Deload — light, 2 sets, smooth rotation." }
       }
     },
     {
@@ -109,7 +120,8 @@
       "weeks": {
         "2": { "sets": [12, 12, 12], "note": "Speed over load — coil the back hip, explode through. 5/side." },
         "3": { "sets": [12, 12, 12], "note": "Same ball, faster hips. Reset every rep." },
-        "4": { "sets": [14, 14, 14], "note": "Heavier ball only if bar speed stays crisp." }
+        "4": { "sets": [14, 14, 14], "note": "Heavier ball only if bar speed stays crisp." },
+        "5": { "sets": [10, 10, null], "note": "Deload — light ball, a few sharp throws, stay fresh." }
       }
     },
     {
@@ -118,7 +130,8 @@
       "weeks": {
         "2": { "sets": [70, 70, 70], "note": "Accumulate — one hand, 40 yd, ribs stacked, no side bend. ⚠️" },
         "3": { "sets": [80, 80, 80], "note": "Intensify — +10 lb, brace the opposite side. ⚠️" },
-        "4": { "sets": [90, 90, 80], "note": "Peak — heavy carries, stand tall the whole way. ⚠️" }
+        "4": { "sets": [90, 90, 80], "note": "Peak — heavy carries, stand tall the whole way. ⚠️" },
+        "5": { "sets": [45, 45, null], "note": "Deload — light, 2 walks, perfect posture. ⚠️" }
       }
     },
 
@@ -128,7 +141,8 @@
       "weeks": {
         "2": { "sets": [null, null, null, null], "note": "Bodyweight, 6-10, dead hang to full lockout. Log added load if any." },
         "3": { "sets": [null, null, null, null], "note": "Add reps, or a 10 lb belt if 10 is easy." },
-        "4": { "sets": [null, null, null, null], "note": "Weighted top sets if reps are there." }
+        "4": { "sets": [null, null, null, null], "note": "Weighted top sets if reps are there." },
+        "5": { "sets": [null, null, null, null], "note": "Deload — 2 easy bodyweight sets, well shy of failure." }
       }
     },
     {
@@ -137,7 +151,8 @@
       "weeks": {
         "2": { "sets": [60, 60, 60], "note": "Accumulate — chest glued to the pad, squeeze the blades." },
         "3": { "sets": [65, 65, 65], "note": "Intensify — +5 lb, brief pause at the top." },
-        "4": { "sets": [70, 70, 65], "note": "Peak — heavy first sets, control the stretch." }
+        "4": { "sets": [70, 70, 65], "note": "Peak — heavy first sets, control the stretch." },
+        "5": { "sets": [35, 35, null], "note": "Deload — light, 2 sets, feel the squeeze." }
       }
     },
     {
@@ -146,7 +161,8 @@
       "weeks": {
         "2": { "sets": [20, 20, 20], "note": "Accumulate — per side, constant tension, chase the pump." },
         "3": { "sets": [22.5, 22.5, 22.5], "note": "Intensify — small bump, same low-to-high sweep." },
-        "4": { "sets": [25, 25, 22.5], "note": "Peak — heavier first sets, no rest at top/bottom." }
+        "4": { "sets": [25, 25, 22.5], "note": "Peak — heavier first sets, no rest at top/bottom." },
+        "5": { "sets": [12, 12, null], "note": "Deload — light, 2 sets, easy pump." }
       }
     },
     {
@@ -155,7 +171,8 @@
       "weeks": {
         "2": { "sets": [140, 140, 140], "note": "Accumulate — drive elbows to ribs, full stretch up top." },
         "3": { "sets": [150, 150, 150], "note": "Intensify — +10 lb, bar to upper chest, no jerk." },
-        "4": { "sets": [160, 160, 150], "note": "Peak — heavy first sets, controlled negatives." }
+        "4": { "sets": [160, 160, 150], "note": "Peak — heavy first sets, controlled negatives." },
+        "5": { "sets": [85, 85, null], "note": "Deload — ~60%, 2 sets, smooth and full range." }
       }
     },
     {
@@ -164,7 +181,8 @@
       "weeks": {
         "2": { "sets": [40, 40, 40], "note": "Light, 15-20, external rotate, chase the squeeze." },
         "3": { "sets": [45, 45, 45], "note": "Small bump, stay strict — posture insurance." },
-        "4": { "sets": [50, 50, 45], "note": "Peak — keep it clean, never grind these." }
+        "4": { "sets": [50, 50, 45], "note": "Peak — keep it clean, never grind these." },
+        "5": { "sets": [25, 25, null], "note": "Deload — very light, 2 sets, just the squeeze." }
       }
     },
     {
@@ -173,7 +191,8 @@
       "weeks": {
         "2": { "sets": [null, null, null], "note": "Bodyweight, 8-12, brace hard, stop before the low back sags. ⚠️" },
         "3": { "sets": [null, null, null], "note": "Longer range, neutral spine the whole way. ⚠️" },
-        "4": { "sets": [null, null, null], "note": "Full rollout only if you keep a flat back. ⚠️" }
+        "4": { "sets": [null, null, null], "note": "Full rollout only if you keep a flat back. ⚠️" },
+        "5": { "sets": [null, null, null], "note": "Deload — short range, 2 easy sets. ⚠️" }
       }
     },
 
@@ -183,7 +202,8 @@
       "weeks": {
         "2": { "sets": [150, 150, 150, 150], "note": "Accumulate — total bar, 8-10, bar to the upper chest." },
         "3": { "sets": [160, 160, 160, 160], "note": "Intensify — +10 lb, elbows ~45°, controlled descent." },
-        "4": { "sets": [170, 165, 160, 160], "note": "Peak — top sets heavy, then back off. Third chest hit of the week." }
+        "4": { "sets": [170, 165, 160, 160], "note": "Peak — top sets heavy, then back off. Third chest hit of the week." },
+        "5": { "sets": [95, 95, null, null], "note": "Deload — ~60%, 2 smooth sets, leave 3-4 in reserve." }
       }
     },
     {
@@ -192,7 +212,8 @@
       "weeks": {
         "2": { "sets": [75, 75, 75], "note": "Accumulate — per hand, 10-12, full stretch at the bottom." },
         "3": { "sets": [80, 80, 80], "note": "Intensify — +5/hand, blades pinned back." },
-        "4": { "sets": [85, 85, 80], "note": "Peak — heavy first sets, near-touch at the top." }
+        "4": { "sets": [85, 85, 80], "note": "Peak — heavy first sets, near-touch at the top." },
+        "5": { "sets": [45, 45, null], "note": "Deload — light, 2 sets, easy tempo." }
       }
     },
     {
@@ -201,7 +222,8 @@
       "weeks": {
         "2": { "sets": [25, 25, 25], "note": "Accumulate — per side, big arc, squeeze out front." },
         "3": { "sets": [27.5, 27.5, 27.5], "note": "Intensify — small bump, constant tension." },
-        "4": { "sets": [30, 30, 27.5], "note": "Peak — heavier first sets, control the stretch." }
+        "4": { "sets": [30, 30, 27.5], "note": "Peak — heavier first sets, control the stretch." },
+        "5": { "sets": [15, 15, null], "note": "Deload — light, 2 sets, just blood flow." }
       }
     },
     {
@@ -210,7 +232,8 @@
       "weeks": {
         "2": { "sets": [55, 55, 55], "note": "Accumulate — per hand, 8-12, brace so the low back stays flat. ⚠️" },
         "3": { "sets": [60, 60, 60], "note": "Intensify — +5/hand, press up and slightly in. ⚠️" },
-        "4": { "sets": [65, 60, 60], "note": "Peak — top set heavy, lower to ear height controlled." }
+        "4": { "sets": [65, 60, 60], "note": "Peak — top set heavy, lower to ear height controlled." },
+        "5": { "sets": [35, 35, null], "note": "Deload — light, 2 sets, stay braced. ⚠️" }
       }
     },
     {
@@ -219,7 +242,8 @@
       "weeks": {
         "2": { "sets": [20, 20, 20], "note": "Accumulate — per hand, 15-20, lead with the elbows, no swing." },
         "3": { "sets": [22.5, 22.5, 22.5], "note": "Intensify — small bump, 'pour the pitcher' tilt." },
-        "4": { "sets": [25, 22.5, 22.5], "note": "Peak — top set heavy, slow on the way down." }
+        "4": { "sets": [25, 22.5, 22.5], "note": "Peak — top set heavy, slow on the way down." },
+        "5": { "sets": [12, 12, null], "note": "Deload — light, 2 sets, strict and easy." }
       }
     },
     {
@@ -228,7 +252,8 @@
       "weeks": {
         "2": { "sets": [35, 35, 35], "note": "Accumulate — per hand, 10-12, elbows pinned, no swing." },
         "3": { "sets": [37.5, 37.5, 37.5], "note": "Intensify — small bump, full stretch at the bottom." },
-        "4": { "sets": [40, 40, 37.5], "note": "Peak — heavy first sets, squeeze and control." }
+        "4": { "sets": [40, 40, 37.5], "note": "Peak — heavy first sets, squeeze and control." },
+        "5": { "sets": [20, 20, null], "note": "Deload — light, 2 sets, clean reps." }
       }
     },
     {
@@ -237,7 +262,8 @@
       "weeks": {
         "2": { "sets": [25, 25], "note": "Added load via belt, 8-12. Slight forward lean for chest." },
         "3": { "sets": [35, 35], "note": "+10 lb, don't dive past a comfy shoulder stretch. ⚠️" },
-        "4": { "sets": [45, 45], "note": "Peak load. Optional — skip if the shoulders are cooked." }
+        "4": { "sets": [45, 45], "note": "Peak load. Optional — skip if the shoulders are cooked." },
+        "5": { "sets": [null, null], "note": "Deload — bodyweight only, or skip entirely." }
       }
     }
   ]
